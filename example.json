@@ -1,0 +1,14 @@
+// course.json
+
+    "_branching": {
+        "_isEnabled": true
+    }
+
+// blocks.json
+
+    "_branching": {
+        "_isEnabled": true,
+        "_correct": "b-255",
+        "_partial": "b-260",
+        "_incorrect": "b-270"
+    }

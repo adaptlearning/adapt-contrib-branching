@@ -1,0 +1,17 @@
+{
+  "name": "adapt-branching",
+  "version": "0.0.1",
+  "framework": ">=5.5",
+  "homepage": "https://github.com/olivermartinfoster/adapt-branching",
+  "issues": "https://github.com/olivermartinfoster/adapt-branching/issues/new",
+  "extension" : "branching",
+  "displayName" : "Branching",
+  "description": "A simple branching extension",
+  "main": "/js/adapt-branching.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-extension"
+  ],
+  "license": "GPL-3.0",
+  "targetAttribute": "_branching"
+}

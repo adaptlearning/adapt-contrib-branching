@@ -1,0 +1,91 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://jsonschema.net",
+  "required": false,
+  "properties": {
+    "pluginLocations": {
+      "type": "object",
+      "required": true,
+      "properties": {
+        "config": {
+          "type": "object"
+        },
+        "course": {
+          "type": "object",
+          "properties": {
+            "_branching": {
+              "type": "object",
+              "required": false,
+              "legend": "Branching",
+              "properties": {
+                "_isEnabled": {
+                  "type": "boolean",
+                  "required": true,
+                  "default": true,
+                  "title": "Is enabled",
+                  "inputType": "Checkbox",
+                  "validators": [],
+                  "help": "Controls whether the Branching extension is enabled or disabled."
+                }
+              }
+            }
+          }
+        },
+        "contentobject": {
+          "type": "object"
+        },
+        "article": {
+          "type": "object"
+        },
+        "block": {
+          "type": "object",
+          "properties": {
+            "_branching": {
+              "type": "object",
+              "required": false,
+              "legend": "Branching",
+              "properties": {
+                "_isEnabled": {
+                  "type": "boolean",
+                  "required": false,
+                  "default": false,
+                  "title": "Enable Branching",
+                  "inputType": "Checkbox",
+                  "validators": []
+                },
+                "_correct": {
+                  "type": "string",
+                  "required": false,
+                  "default": "",
+                  "title": "Next block id to render if question is correctly answered.",
+                  "inputType": "Text",
+                  "validators": []
+                },
+                "_partial": {
+                  "type": "string",
+                  "required": false,
+                  "default": "",
+                  "title": "Next block id to render if question is part correctly answered.",
+                  "inputType": "Text",
+                  "validators": []
+                },
+                "_incorrect": {
+                  "type": "string",
+                  "required": false,
+                  "default": "",
+                  "title": "Next block id to render if question is incorrectly answered.",
+                  "inputType": "Text",
+                  "validators": []
+                }
+              }
+            }
+          }
+        },
+        "component": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
