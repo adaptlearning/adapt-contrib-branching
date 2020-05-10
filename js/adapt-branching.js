@@ -1,7 +1,8 @@
 define([
   'core/js/adapt',
-  'core/js/models/questionModel'
-], function(Adapt, QuestionModel) {
+  'core/js/models/questionModel',
+  'core/js/models/componentModel'
+], function(Adapt, QuestionModel, ComponentModel) {
 
   class Branching extends Backbone.Controller {
 
@@ -148,6 +149,7 @@ define([
         const branchAttempts = (model.get('_branchAttempts') || 0);
         model.set('_branchAttempts', branchAttempts + 1);
       });
+      let hasRestored = false;
       const cloned = nextModel.deepClone({
         _isBranch: true,
         _isAvailable: true
@@ -167,14 +169,24 @@ define([
           if (restore) {
             const attemptIndex = clone.get('_branchAttempts') - 1;
             const attemptObjects = model.getAttemptObjects();
-            clone.set(attemptObjects[attemptIndex]);
-            isRestored = true;
+            if (attemptObjects[attemptIndex]) {
+              clone.set(attemptObjects[attemptIndex]);
+              isRestored = true;
+              hasRestored = true;
+            }
           }
           if (restore && !isRestored || !restore) {
             clone.reset('hard', true);
           }
         }
       });
+      if (hasRestored) {
+        // If part of the branch has been restored assume it was all completed
+        cloned.getAllDescendantModels(true).reverse().forEach(model => {
+          model.setCompletionStatus();
+        });
+        cloned.setCompletionStatus();
+      }
       this.saveModelOrder(container, nextModel);
       return cloned;
     }
