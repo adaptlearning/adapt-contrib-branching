@@ -150,12 +150,11 @@ define([
         model.set('_branchAttempts', branchAttempts + 1);
       });
       let hasRestored = false;
-      const cloned = nextModel.deepClone({
-        _isBranch: true,
-        _isAvailable: true
-      }, {
-        _isAvailable: true
-      }, (model, clone) => {
+      const cloned = nextModel.deepClone((clone, model) => {
+        if (model === nextModel) {
+          clone.set('_isBranch', true);
+        }
+        clone.set('_isAvailable', true);
         clone.set('_branchModelId', model.get('_id'));
         if (clone.has('_trackingId')) {
           clone.set('_trackingId', -1);
@@ -187,6 +186,8 @@ define([
         });
         cloned.setCompletionStatus();
       }
+      // Add to parent in hierarchy
+      nextModel.getParent().getChildren().add(cloned);
       this.saveModelOrder(container, nextModel);
       return cloned;
     }
