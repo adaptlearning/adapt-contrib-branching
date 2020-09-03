@@ -19,7 +19,7 @@ The **Branching** extension allows articles to contain a series of blocks which 
 
 ## Settings Overview
 
-- A basic **Branching** configuration would be at the article (*articles.json*) level with branching block (*blocks.json*) children. The **\_onChildren** attribute determines the container.
+- A basic **Branching** configuration would be at the article (*articles.json*) level with branching block children (*blocks.json*). The **\_onChildren** attribute determines the container.
 
 The attributes listed below are properly formatted as JSON in [*example.json*](https://github.com/adaptlearning/adapt-contrib-branching/blob/master/example.json).
 
