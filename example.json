@@ -1,14 +1,21 @@
 // course.json
+  "_branching": {
+    "_isEnabled": true
+  }
 
-    "_branching": {
-        "_isEnabled": true
-    }
+// articles.json
+
+  "_branching": {
+    "_isEnabled": true,
+    "_onChildren": true,
+    "_start": "b-250"
+  },
 
 // blocks.json
 
-    "_branching": {
-        "_isEnabled": true,
-        "_correct": "b-255",
-        "_partial": "b-260",
-        "_incorrect": "b-270"
-    }
+  "_branching": {
+    "_isEnabled": true,
+    "_correct": "b-255",
+    "_partlyCorrect": "b-260",
+    "_incorrect": "b-270"
+  }

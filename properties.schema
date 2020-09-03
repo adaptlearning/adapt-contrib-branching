@@ -36,7 +36,24 @@
           "type": "object"
         },
         "article": {
-          "type": "object"
+          "type": "object",
+          "properties": {
+            "_branching": {
+              "type": "object",
+              "required": false,
+              "legend": "Branching",
+              "properties": {
+                "_isEnabled": {
+                  "type": "boolean",
+                  "required": false,
+                  "default": false,
+                  "title": "Enable branching child blocks",
+                  "inputType": "Checkbox",
+                  "validators": []
+                }
+              }
+            }
+          }
         },
         "block": {
           "type": "object",
@@ -50,7 +67,7 @@
                   "type": "boolean",
                   "required": false,
                   "default": false,
-                  "title": "Enable Branching",
+                  "title": "Enable branching from this block",
                   "inputType": "Checkbox",
                   "validators": []
                 },
@@ -58,15 +75,15 @@
                   "type": "string",
                   "required": false,
                   "default": "",
-                  "title": "Next block id to render if question is correctly answered.",
+                  "title": "Next block id to render if the questions are correctly answered.",
                   "inputType": "Text",
                   "validators": []
                 },
-                "_partial": {
+                "_partlyCorrect": {
                   "type": "string",
                   "required": false,
                   "default": "",
-                  "title": "Next block id to render if question is part correctly answered.",
+                  "title": "Next block id to render if the questions are partly correctly answered.",
                   "inputType": "Text",
                   "validators": []
                 },
@@ -74,7 +91,7 @@
                   "type": "string",
                   "required": false,
                   "default": "",
-                  "title": "Next block id to render if question is incorrectly answered.",
+                  "title": "Next block id to render if the questions are incorrectly answered.",
                   "inputType": "Text",
                   "validators": []
                 }
