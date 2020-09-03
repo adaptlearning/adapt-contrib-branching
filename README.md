@@ -40,6 +40,7 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 ## Limitations
 
 This extension will not work with legacy versions of trickle <=4.  
+This extension will not work with legacy versions of assessment <=4.  
 This extension requires spoor pr [#199](https://github.com/adaptlearning/adapt-contrib-spoor/pull/199) to persist scenarios between sessions.  
 
 ----------------------------
