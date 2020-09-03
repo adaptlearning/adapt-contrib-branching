@@ -2,7 +2,7 @@
 
 **Branching** is an *extension* which is *not* bundled with the [Adapt framework](https://github.com/adaptlearning/adapt_framework).
 
-The **Branching** extension allows articles to contain a series of blocks which branach according to question answers. Using **Branching**, a course author may create dynamic experiences based upon user responses.
+The **Branching** extension allows articles to contain a series of blocks which branch according to question answers. Using **Branching**, a course author may create a dynamic experience based upon user responses.
 
 ## Installation
 
@@ -15,18 +15,17 @@ The **Branching** extension allows articles to contain a series of blocks which 
     `adapt install`
     (This second method will reinstall all plug-ins listed in *adapt.json*.)
 
-* **Branching** may be installed in the Authoring Tool by uploading its zip.
+* **Branching** may be installed in the Authoring Tool by uploading the zip.
 
 ## Settings Overview
 
-- A basic **Branching** configuration would be at the article (*articles.json*) level with block (*blocks.json*) childrenlevel. The **\_onChildren** attribute determines the container (the article).
-- _**Branching** may also be added to_ course.json _as a simple switch to enable/disable **Branching** during development.
+- A basic **Branching** configuration would be at the article (*articles.json*) level with branching block (*blocks.json*) children. The **\_onChildren** attribute determines the container.
 
 The attributes listed below are properly formatted as JSON in [*example.json*](https://github.com/adaptlearning/adapt-contrib-branching/blob/master/example.json).
 
 ### Attributes
 
-**\_branching_** (object): The Branching attributes group contains values for **\_isEnabled**, **\_onChildren**, **\_correct**, **\_partlyCorrect**, and **\_incorrect**.
+**\_branching** (object): The Branching attributes group contains values for **\_isEnabled**, **\_onChildren**, **\_correct**, **\_partlyCorrect**, and **\_incorrect**.
 
 >**\_isEnabled** (boolean):  Turns on and off the **Branching** extension. Can be set in *course.json*, *articles.json* and *blocks.json* to disable **Branching** where not required. Also useful during course development.
 
