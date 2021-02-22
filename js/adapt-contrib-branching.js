@@ -105,8 +105,7 @@ class Branching extends Backbone.Controller {
 
   onPopupClosed() {
     this.openPopupCount--;
-    if (!this.shouldContinueOnPopupClose) return;
-    if (this.openPopupCount > 0) return;
+    if (!this.shouldContinueOnPopupClose || this.openPopupCount > 0) return;
     this.shouldContinueOnPopupClose = false;
     this.continue();
   }
