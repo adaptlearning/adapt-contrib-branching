@@ -68,14 +68,15 @@ export default class BranchingSet {
     if (!nextId) return true;
 
     const isRelativeId = nextId.includes('@');
-    if (isRelativeId) {
-      const originalLastChildModel = Adapt.findById(lastChildModel.get('_branchOriginalModelId'));
-      const nextModel = originalLastChildModel.findRelativeModel(nextId);
-      const wasModelAlreadyUsed = nextModel.get('_isAvailable');
-      if (wasModelAlreadyUsed) return true;
-      return nextModel;
+    if (!isRelativeId) {
+      return brachingModels.find(model => model.get('_id') === nextId) || true;
     }
-    return brachingModels.find(model => model.get('_id') === nextId) || true;
+    
+    const originalLastChildModel = Adapt.findById(lastChildModel.get('_branchOriginalModelId'));
+    const nextModel = originalLastChildModel.findRelativeModel(nextId);
+    const wasModelAlreadyUsed = nextModel.get('_isAvailable');
+    if (wasModelAlreadyUsed) return true;
+    return nextModel;
   }
 
   addNextModel(nextModel, shouldSave = true, shouldRestore = false) {
