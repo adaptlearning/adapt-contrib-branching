@@ -107,9 +107,9 @@ export default class BranchingSet {
           }
           return;
         }
-        // Reset if not restored or not a question
-        clone.reset('hard', true);
       }
+      // Reset if not restored or not a question
+      clone.reset('hard', true);
     });
     if (wasAnyPartRestored) {
       // If part of the branch has been restored then assume it was all completed.
