@@ -74,7 +74,7 @@
                 "_correct": {
                   "type": "string",
                   "required": false,
-                  "default": "",
+                  "default": "@block+1",
                   "title": "Next block id to render if the questions are correctly answered.",
                   "inputType": "Text",
                   "validators": []
@@ -82,7 +82,7 @@
                 "_partlyCorrect": {
                   "type": "string",
                   "required": false,
-                  "default": "",
+                  "default": "@block+1",
                   "title": "Next block id to render if the questions are partly correctly answered.",
                   "inputType": "Text",
                   "validators": []
@@ -90,7 +90,7 @@
                 "_incorrect": {
                   "type": "string",
                   "required": false,
-                  "default": "",
+                  "default": "@block+1",
                   "title": "Next block id to render if the questions are incorrectly answered.",
                   "inputType": "Text",
                   "validators": []
