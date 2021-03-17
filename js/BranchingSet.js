@@ -47,9 +47,9 @@ export default class BranchingSet {
     const isBeforeStart = !branchedModels.length;
     if (isBeforeStart) {
       const hasStartId = Boolean(config._start);
-      let firstModel;
-      if (hasStartId) firstModel = brachingModels.find(model => model.get('_id') === config._start);
-      else firstModel = brachingModels[0];
+      const firstModel = hasStartId ?
+        brachingModels.find(model => model.get('_id') === config._start) :
+        brachingModels[0];
       return firstModel;
     }
 
