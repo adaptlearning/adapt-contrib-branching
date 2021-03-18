@@ -71,7 +71,7 @@ export default class BranchingSet {
     if (!isRelativeId) {
       return brachingModels.find(model => model.get('_id') === nextId) || true;
     }
-    
+
     const originalLastChildModel = Adapt.findById(lastChildModel.get('_branchOriginalModelId'));
     const nextModel = originalLastChildModel.findRelativeModel(nextId);
     const wasModelAlreadyUsed = nextModel.get('_isAvailable');
@@ -168,7 +168,7 @@ export default class BranchingSet {
     if (!this.canReset) return false;
     const branchedModels = this.branchedModels;
     branchedModels.forEach(model => {
-      if (removeViews) {
+      if (Adapt.parentView && removeViews) {
         const view = Adapt.findViewByModelId(model.get('_id'));
         view && view.remove();
       }
@@ -181,7 +181,7 @@ export default class BranchingSet {
     const trackingIds = [];
     branching[id] = Adapt.offlineStorage.serialize(trackingIds);
     Adapt.offlineStorage.set('b', branching);
-    await Adapt.parentView.addChildren();
+    Adapt.parentView && await Adapt.parentView.addChildren();
     return true;
   }
 
