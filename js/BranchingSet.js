@@ -181,7 +181,7 @@ export default class BranchingSet {
     const trackingIds = [];
     branching[id] = Adapt.offlineStorage.serialize(trackingIds);
     Adapt.offlineStorage.set('b', branching);
-    Adapt.parentView && await Adapt.parentView.addChildren();
+    await Adapt.parentView?.addChildren();
     return true;
   }
 
