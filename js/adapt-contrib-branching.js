@@ -111,10 +111,10 @@ class Branching extends Backbone.Controller {
     this.continue();
   }
 
-  async onAssessmentReset(state) {
+  onAssessmentReset(state) {
     const set = this.getSubsetByModelId(state.articleId);
     if (!set) return;
-    await set.reset({ removeViews: true });
+    set.reset({ removeViews: true });
   }
 
   async continue() {
