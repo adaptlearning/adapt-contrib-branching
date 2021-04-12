@@ -91,7 +91,9 @@ class Branching extends Backbone.Controller {
     }
     if (nextModel === true) {
       // No further models, manually complete branching container
-      event.target.model.setCompletionStatus();
+      const containerModel = event.target.model;
+      containerModel.set('_requireCompletionOf', -1);
+      containerModel.setCompletionStatus();
       return;
     }
     const clonedModel = set.addNextModel(nextModel);
