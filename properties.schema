@@ -1,55 +1,40 @@
 {
   "type": "object",
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$schema": "http://json-schema.org/draft-03/schema",
   "id": "http://jsonschema.net",
-  "required": false,
   "properties": {
     "pluginLocations": {
       "type": "object",
-      "required": true,
       "properties": {
-        "config": {
-          "type": "object"
-        },
         "course": {
           "type": "object",
           "properties": {
             "_branching": {
               "type": "object",
-              "required": false,
               "legend": "Branching",
               "properties": {
                 "_isEnabled": {
                   "type": "boolean",
-                  "required": true,
                   "default": true,
-                  "title": "Is enabled",
-                  "inputType": "Checkbox",
-                  "validators": [],
-                  "help": "Controls whether the Branching extension is enabled or disabled."
+                  "title": "Enable branching globally",
+                  "inputType": "Checkbox"
                 }
               }
             }
           }
-        },
-        "contentobject": {
-          "type": "object"
         },
         "article": {
           "type": "object",
           "properties": {
             "_branching": {
               "type": "object",
-              "required": false,
               "legend": "Branching",
               "properties": {
                 "_isEnabled": {
                   "type": "boolean",
-                  "required": false,
                   "default": false,
-                  "title": "Enable branching child blocks",
-                  "inputType": "Checkbox",
-                  "validators": []
+                  "title": "Enable branching within this article",
+                  "inputType": "Checkbox"
                 }
               }
             }
@@ -60,47 +45,38 @@
           "properties": {
             "_branching": {
               "type": "object",
-              "required": false,
               "legend": "Branching",
               "properties": {
                 "_isEnabled": {
                   "type": "boolean",
-                  "required": false,
-                  "default": false,
-                  "title": "Enable branching from this block",
-                  "inputType": "Checkbox",
-                  "validators": []
+                  "default": true,
+                  "title": "Enable branching to/from this block",
+                  "inputType": "Checkbox"
                 },
                 "_correct": {
                   "type": "string",
-                  "required": false,
-                  "default": "@block+1",
-                  "title": "Next block id to render if the questions are correctly answered.",
+                  "default": "",
+                  "title": "Correct target",
                   "inputType": "Text",
-                  "validators": []
+                  "help": "Next block to render if all questions in this block are answered correctly"
                 },
                 "_partlyCorrect": {
                   "type": "string",
-                  "required": false,
-                  "default": "@block+1",
-                  "title": "Next block id to render if the questions are partly correctly answered.",
+                  "default": "",
+                  "title": "Partly correct target",
                   "inputType": "Text",
-                  "validators": []
+                  "help": "Next block to render if all questions in this block are answered partly correctly"
                 },
                 "_incorrect": {
                   "type": "string",
-                  "required": false,
-                  "default": "@block+1",
-                  "title": "Next block id to render if the questions are incorrectly answered.",
+                  "default": "",
+                  "title": "Incorrect target",
                   "inputType": "Text",
-                  "validators": []
+                  "help": "Next block to render if all questions in this block are answered incorrectly"
                 }
               }
             }
           }
-        },
-        "component": {
-          "type": "object"
         }
       }
     }
