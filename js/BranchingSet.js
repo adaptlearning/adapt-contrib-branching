@@ -166,7 +166,7 @@ export default class BranchingSet {
 
   async reset({ removeViews = false } = {}) {
     if (!this.canReset) return false;
-    this.model.set('_requireCompletionOf', Infinity);
+    this.model.set('_requireCompletionOf', Number.POSITIVE_INFINITY);
     const branchedModels = this.branchedModels;
     branchedModels.forEach(model => {
       if (Adapt.parentView && removeViews) {
