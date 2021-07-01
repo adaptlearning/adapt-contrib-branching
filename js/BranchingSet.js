@@ -141,7 +141,7 @@ export default class BranchingSet {
     return this.model.getChildren().filter(model => {
       if (model.get('_isAvailable')) return false;
       const config = model.get('_branching');
-      return (config && config._isEnabled);
+      return (config && config._isEnabled !== false);
     });
   }
 
@@ -149,7 +149,7 @@ export default class BranchingSet {
     return this.model.getChildren().filter(model => {
       if (!model.get('_isAvailable')) return false;
       const config = model.get('_branching');
-      return (config && config._isEnabled);
+      return (config && config._isEnabled !== false);
     });
   }
 
