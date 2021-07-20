@@ -31,9 +31,9 @@ class Branching extends Backbone.Controller {
     this._rawSets.length = 0;
     const containerModels = data.filter(model => {
       const type = model.get('_type');
-      if (type === 'course') return;
+      if (type === 'course') return false;
       const config = model.get('_branching');
-      if (!config || !config._isEnabled) return;
+      if (!config || !config._isEnabled) return false;
       if (type === 'article' && config._onChildren === undefined) {
         // Assume this is the authoring tool and that an article
         // is always a branching container.
@@ -90,10 +90,10 @@ class Branching extends Backbone.Controller {
       return;
     }
     if (nextModel === true) {
-      // No further models, manually complete branching container
+      // No further models, manually check completion of branching container
       const containerModel = event.target.model;
       containerModel.set('_requireCompletionOf', -1);
-      containerModel.setCompletionStatus();
+      containerModel.checkCompletionStatus();
       return;
     }
     const clonedModel = set.addNextModel(nextModel);

@@ -64,7 +64,7 @@ export default class BranchingSet {
 
     // Branch from the last model's correctness, if configured
     const correctness = getCorrectness(lastChildModel);
-    const nextId = lastChildConfig['_force'] || lastChildConfig[`_${correctness}`];
+    const nextId = lastChildConfig._force || lastChildConfig[`_${correctness}`];
     if (!nextId) return true;
 
     const isRelativeId = nextId.includes('@');
@@ -139,17 +139,17 @@ export default class BranchingSet {
 
   get models() {
     return this.model.getChildren().filter(model => {
-      if (model.get('_isAvailable')) return;
+      if (model.get('_isAvailable')) return false;
       const config = model.get('_branching');
-      return (config && config._isEnabled);
+      return (config && config._isEnabled !== false);
     });
   }
 
   get branchedModels() {
     return this.model.getChildren().filter(model => {
-      if (!model.get('_isAvailable')) return;
+      if (!model.get('_isAvailable')) return false;
       const config = model.get('_branching');
-      return (config && config._isEnabled);
+      return (config && config._isEnabled !== false);
     });
   }
 
@@ -166,7 +166,7 @@ export default class BranchingSet {
 
   async reset({ removeViews = false } = {}) {
     if (!this.canReset) return false;
-    this.model.set('_requireCompletionOf', Infinity);
+    this.model.set('_requireCompletionOf', Number.POSITIVE_INFINITY);
     const branchedModels = this.branchedModels;
     branchedModels.forEach(model => {
       if (Adapt.parentView && removeViews) {
