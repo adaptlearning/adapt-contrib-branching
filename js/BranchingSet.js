@@ -33,7 +33,9 @@ export default class BranchingSet {
     if (this.isAtEnd) {
       this.model.set('_requireCompletionOf', -1);
       // Synchronously check completion, this.model.checkCompletionStatus is async
+      Adapt.checkingCompletion();
       this.model.checkCompletionStatusFor('_isComplete');
+      Adapt.checkingCompletion();
       this.model.checkCompletionStatusFor('_isInteractionComplete');
     }
     return true;
