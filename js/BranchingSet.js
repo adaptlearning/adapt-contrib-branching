@@ -115,7 +115,7 @@ export default class BranchingSet {
           }
           return;
         }
-      } else if (shouldRestore) {
+      } else if (clone.isTypeGroup('component') && shouldRestore) {
         // Assume non-question components should be completed
         wasAnyPartRestored = true;
       }
