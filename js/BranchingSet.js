@@ -30,13 +30,19 @@ export default class BranchingSet {
       const model = findByTrackingPosition(trackingPosition);
       this.addNextModel(model, false, true);
     });
+    if (this.isAtEnd) {
+      this.model.set('_requireCompletionOf', -1);
+      // Synchronously check completion, this.model.checkCompletionStatus is async
+      this.model.checkCompletionStatusFor('_isComplete');
+      this.model.checkCompletionStatusFor('_isInteractionComplete');
+    }
     return true;
   }
 
   addFirstModel() {
     // Find and add the first child if the container was not restored
     const model = this.getNextModel();
-    this.addNextModel(model, true, false); // BUG?: check change to flag works
+    this.addNextModel(model, true, false);
   }
 
   getNextModel() {
@@ -107,6 +113,9 @@ export default class BranchingSet {
           }
           return;
         }
+      } else if (shouldRestore) {
+        // Assume non-question components should be completed
+        wasAnyPartRestored = true;
       }
       // Reset if not restored or not a question
       clone.reset('hard', true);
@@ -158,6 +167,10 @@ export default class BranchingSet {
     const firstChild = branchedModels[0];
     const lastChild = branchedModels[branchedModels.length - 1];
     return (firstChild === lastChild);
+  }
+
+  get isAtEnd() {
+    return (this.getNextModel() === true);
   }
 
   get canReset() {
