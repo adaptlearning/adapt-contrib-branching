@@ -97,7 +97,10 @@ export default class BranchingSet {
     nextModel.set('_branchAttempts', attemptIndex + 1);
     let wasAnyPartRestored = false;
     const cloned = nextModel.deepClone((clone, model) => {
-      clone.set('_isAvailable', true);
+      clone.set({
+        _id: `${model.get('_id')}_branching_${attemptIndex}`, // Replicable ids for bookmarking
+        _isAvailable: true
+      });
       // Remove tracking ids as these will change depending on the branches
       // Clone attempt states are stored on the original model in their order of occurance
       if (clone.has('_trackingId')) {
