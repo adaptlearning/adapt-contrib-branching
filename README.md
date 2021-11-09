@@ -39,9 +39,9 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 ## Limitations
 
-This extension will not work with legacy versions of trickle <=4.  
-This extension will not work with legacy versions of assessment <=4.  
-This extension requires spoor pr [#199](https://github.com/adaptlearning/adapt-contrib-spoor/pull/199) to persist scenarios between sessions.  
+* This extension will not work with legacy versions of trickle <=4.  
+* This extension will not work with legacy versions of assessment <=4.  
+* Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
 
 ----------------------------
 **Version number:**  0.1.0  <a href="https://community.adaptlearning.org/" target="_blank"><img src="https://github.com/adaptlearning/documentation/blob/master/04_wiki_assets/plug-ins/images/adapt-logo-mrgn-lft.jpg" alt="adapt learning logo" align="right"></a>  
