@@ -178,12 +178,7 @@ export default class BranchingSet {
     return (this.getNextModel() === true);
   }
 
-  get canReset() {
-    return !this.isAtStart;
-  }
-
   async reset({ removeViews = false } = {}) {
-    if (!this.canReset) return false;
     this.model.set('_requireCompletionOf', Number.POSITIVE_INFINITY);
     const branchedModels = this.branchedModels;
     branchedModels.forEach(model => {
