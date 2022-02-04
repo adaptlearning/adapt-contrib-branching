@@ -12,9 +12,9 @@ class Branching extends Backbone.Controller {
     this.listenTo(Adapt, {
       'app:dataReady': this.onAppDataReady,
       'popup:opened': this.onPopupOpened,
-      'popup:closed': this.onPopupClosed,
-      'assessments:reset': this.onAssessmentReset
+      'popup:closed': this.onPopupClosed
     });
+    this.listenTo(Adapt.articles, 'change:_isComplete', this.onArticleReset);
   }
 
   async onAppDataReady() {
@@ -113,13 +113,16 @@ class Branching extends Backbone.Controller {
     this.continue();
   }
 
-  onAssessmentReset(state) {
-    const set = this.getSubsetByModelId(state.articleId);
+  onArticleReset(model, isComplete) {
+    if (isComplete) return;
+    const set = this.getSubsetByModelId(model.get('_id'));
     if (!set) return;
     set.reset({ removeViews: true });
   }
 
   async continue() {
+    if (!Adapt.parentView) return;
+
     if (this.openPopupCount) {
       this.shouldContinueOnPopupClose = true;
       return;
