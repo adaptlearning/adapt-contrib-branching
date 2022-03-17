@@ -1,6 +1,7 @@
+import Backbone from 'backbone';
 import Adapt from 'core/js/adapt';
 import data from 'core/js/data';
-import QuestionModel from 'core/js/models/questionModel';
+import ComponentModel from 'core/js/models/componentModel';
 import BranchingSet from './BranchingSet';
 
 class Branching extends Backbone.Controller {
@@ -12,7 +13,8 @@ class Branching extends Backbone.Controller {
     this.listenTo(Adapt, {
       'app:dataReady': this.onAppDataReady,
       'popup:opened': this.onPopupOpened,
-      'popup:closed': this.onPopupClosed
+      'popup:closed': this.onPopupClosed,
+      'assessments:reset': this.onAssessmentReset
     });
     this.listenTo(Adapt.articles, 'change:_isComplete', this.onArticleReset);
   }
@@ -120,6 +122,12 @@ class Branching extends Backbone.Controller {
     set.reset({ removeViews: true });
   }
 
+  onAssessmentReset(state) {
+    const set = this.getSubsetByModelId(state.articleId);
+    if (!set) return;
+    set.reset({ removeViews: true });
+  }
+
   async continue() {
     if (!Adapt.parentView) return;
 
@@ -137,12 +145,42 @@ class Branching extends Backbone.Controller {
   }
 
   contineAfterBranchChild(model) {
+    this.checkIfIsEffectivelyComplete(model);
     if (!model.get('_isBranchChild')) return;
     this.continue();
   }
 
+  /**
+   * Check if, excluding _isTrackable: false elements, that the branching is
+   * effectively complete and set completion criteria accordingly.
+   * @param {Backbone.model} model
+   */
+  checkIfIsEffectivelyComplete(model) {
+    const childModel = model.getParent();
+    const isBranchChild = childModel.get('_isBranchChild');
+    if (!isBranchChild) return;
+    const requireCompletionOf = childModel.get('_requireCompletionOf');
+    const hasStandardCompletionCriteria = (requireCompletionOf !== -1);
+    if (hasStandardCompletionCriteria) return;
+    // Excludes non-trackable extension components, like trickle buttons
+    const areAllAvailableTrackableChildrenComplete = childModel.getChildren()
+      .filter(model => model.get('_isAvailble') && model.get('_isTrackable'))
+      .every(model => model.get('_isComplete'));
+    if (!areAllAvailableTrackableChildrenComplete) return;
+    const containerModel = childModel.getParent();
+    const set = this.getSubsetByModelId(containerModel.get('_id'));
+    const isInValidBranchingSet = Boolean(set);
+    if (!isInValidBranchingSet) return;
+    const nextModel = set.getNextModel({ isTheoretical: true });
+    const isBranchingFinished = (nextModel === true);
+    if (!isBranchingFinished) return;
+    // Allow assessment to complete at the end, before the last trickle button is clicked
+    containerModel.set('_requireCompletionOf', -1);
+    containerModel.checkCompletionStatus();
+  }
+
   saveBranchQuestionAttemptHistory(model) {
-    if (!(model instanceof QuestionModel)) return;
+    if (!(model instanceof ComponentModel)) return;
     const branchOriginModelId = model.get('_branchOriginalModelId');
     if (!branchOriginModelId) return;
     const originModel = Adapt.findById(branchOriginModelId);

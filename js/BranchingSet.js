@@ -1,6 +1,6 @@
 import Adapt from 'core/js/adapt';
 import data from 'core/js/data';
-import QuestionModel from 'core/js/models/questionModel';
+import ComponentModel from 'core/js/models/componentModel';
 import {
   getTrackingPosition,
   findByTrackingPosition
@@ -17,7 +17,16 @@ export default class BranchingSet {
     /** @type {AdaptModel} */
     this.model = options.model;
     const wasRestored = this.restore();
-    if (!wasRestored) this.addFirstModel();
+    if (wasRestored) {
+      // Check if the next model needs loading, this will happen if the previous
+      // item was completed in a previous session and before the next item has loaded,
+      // such as when a trickle button is enabled but not yet clicked
+      const nextModel = this.getNextModel();
+      if (typeof nextModel !== 'object') return;
+      this.addNextModel(nextModel, true, false, true);
+      return;
+    }
+    this.addFirstModel();
   }
 
   restore() {
@@ -26,9 +35,10 @@ export default class BranchingSet {
     const id = this.model.get('_id');
     if (!branching[id]) return;
     const trackingPositions = Adapt.offlineStorage.deserialize(branching[id]);
-    trackingPositions.forEach(trackingPosition => {
+    trackingPositions.forEach((trackingPosition, index) => {
+      const isLast = (index === trackingPositions.length - 1);
       const model = findByTrackingPosition(trackingPosition);
-      this.addNextModel(model, false, true);
+      this.addNextModel(model, false, true, isLast);
     });
     if (this.isAtEnd) {
       this.model.set('_requireCompletionOf', -1);
@@ -47,7 +57,7 @@ export default class BranchingSet {
     this.addNextModel(model, true, false);
   }
 
-  getNextModel() {
+  getNextModel({ isTheoretical = false } = {}) {
     const config = this.model.get('_branching');
     const brachingModels = this.models;
     const branchedModels = this.branchedModels;
@@ -63,7 +73,7 @@ export default class BranchingSet {
 
     const lastChildModel = branchedModels[branchedModels.length - 1];
     const isLastIncomplete = !lastChildModel.get('_isComplete');
-    if (isLastIncomplete) {
+    if (isLastIncomplete && !isTheoretical) {
       return false;
     }
 
@@ -87,7 +97,7 @@ export default class BranchingSet {
     return nextModel;
   }
 
-  addNextModel(nextModel, shouldSave = true, shouldRestore = false) {
+  addNextModel(nextModel, shouldSave = true, shouldRestore = false, isLast = true) {
     // Clear the set's current back() position
     this.model.set({
       _branchLastPreviousIndex: null
@@ -95,7 +105,7 @@ export default class BranchingSet {
     // Increment the original model's attempts
     const attemptIndex = (nextModel.get('_branchAttempts') || 0);
     nextModel.set('_branchAttempts', attemptIndex + 1);
-    let wasAnyPartRestored = false;
+    let isAnyPartRestored = false;
     const cloned = nextModel.deepClone((clone, model) => {
       clone.set({
         _id: `${model.get('_id')}_branching_${attemptIndex}`, // Replicable ids for bookmarking
@@ -106,33 +116,36 @@ export default class BranchingSet {
       if (clone.has('_trackingId')) {
         clone.unset('_trackingId');
       }
-      if (clone instanceof QuestionModel) {
+      if (clone instanceof ComponentModel) {
         // Clear clone response history
         clone.set('_attemptStates', false);
         if (shouldRestore) {
           // Restore the attempt state from the original model in occurance order
           const attemptObjects = model.getAttemptObjects();
-          if (attemptObjects[attemptIndex]) {
+          const hasAttemptRecord = (attemptObjects.length && attemptObjects[attemptIndex]);
+          if (hasAttemptRecord) {
             clone.set(attemptObjects[attemptIndex]);
-            wasAnyPartRestored = true;
+            isAnyPartRestored = true;
+            return;
           }
-          return;
+          // If the clone is in the middle of a branching and does not have an
+          // attempt record, then the save must have failed or be missing
+          if (!isLast) {
+            clone.setCompletionStatus();
+            isAnyPartRestored = true;
+          }
         }
-      } else if (clone.isTypeGroup('component') && shouldRestore) {
-        // Assume non-question components should be completed
-        wasAnyPartRestored = true;
       }
-      // Reset if not restored or not a question
+      // Reset if not restored or not a component
       clone.reset('hard', true);
     });
-    if (wasAnyPartRestored) {
-      // If part of the branch has been restored then assume it was all completed.
-      // This is as presentation the component's attempt states and completions do not
-      // get saved and restored as part of the branching extension.
-      cloned.getAllDescendantModels(true).reverse().forEach(model => {
-        model.setCompletionStatus();
-      });
-      cloned.setCompletionStatus();
+    if (isAnyPartRestored) {
+      // Make sure to explicitly set the block to complete if complete
+      // This helps trickle setup locking correctly
+      const areAllDescendantsComplete = cloned.getAllDescendantModels(true).every(model => model.get('_isComplete'));
+      if (areAllDescendantsComplete) {
+        cloned.setCompletionStatus();
+      }
     }
     // Add the cloned model to the parent hierarchy
     nextModel.getParent().getChildren().add(cloned);
@@ -180,16 +193,22 @@ export default class BranchingSet {
 
   async reset({ removeViews = false } = {}) {
     this.model.set('_requireCompletionOf', Number.POSITIVE_INFINITY);
+    const parentView = Adapt.findViewByModelId(this.model.get('_id'));
+    const childViews = parentView.getChildViews();
     const branchedModels = this.branchedModels;
     branchedModels.forEach(model => {
       if (Adapt.parentView && removeViews) {
         const view = Adapt.findViewByModelId(model.get('_id'));
-        view && view.remove();
+        if (view) {
+          view.remove();
+          childViews.splice(childViews.findIndex(v => v === view), 1);
+          parentView.nthChild--;
+        }
       }
       data.remove(model);
     });
     this.model.getChildren().remove(branchedModels);
-    this.model.findDescendantModels('question').forEach(model => model.set('_attemptStates', []));
+    this.model.findDescendantModels('component').forEach(model => model.set('_attemptStates', []));
     const branching = Adapt.offlineStorage.get('b') || {};
     const id = this.model.get('_id');
     const trackingIds = [];
