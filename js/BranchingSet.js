@@ -216,6 +216,8 @@ export default class BranchingSet {
     Adapt.offlineStorage.set('b', branching);
     this.addFirstModel();
     await Adapt.parentView?.addChildren();
+    Adapt.checkingCompletion();
+    this.model.checkCompletionStatusFor('_isComplete');
     return true;
   }
 
