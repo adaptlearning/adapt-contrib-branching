@@ -23,7 +23,10 @@ class Branching extends Backbone.Controller {
     const config = Adapt.course.get('_branching');
     if (!config || !config._isEnabled) return;
     // Wait for all other app:dataReady handlers to finish
+    if (this._isAwaitingDataReady) return;
+    this._isAwaitingDataReady = true;
     await data.whenReady();
+    this._isAwaitingDataReady = false;
     this.setupBranchingModels();
     this.setupEventListeners();
     Adapt.trigger('branching:dataReady');
