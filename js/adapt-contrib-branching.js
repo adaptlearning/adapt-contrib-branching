@@ -149,7 +149,7 @@ class Branching extends Backbone.Controller {
 
   contineAfterBranchChild(model) {
     this.checkIfIsEffectivelyComplete(model);
-    if (!model.get('_isBranchChild')) return;
+    if (!model.get('_isBranchChild') || !model.get('_isAvailable')) return;
     this.continue();
   }
 
