@@ -2,10 +2,6 @@ import Adapt from 'core/js/adapt';
 import data from 'core/js/data';
 import ComponentModel from 'core/js/models/componentModel';
 import {
-  getTrackingPosition,
-  findByTrackingPosition
-} from './trackingPosition';
-import {
   getCorrectness
 } from './correctness';
 import offlineStorage from 'core/js/offlineStorage';
@@ -38,7 +34,7 @@ export default class BranchingSet {
     const trackingPositions = offlineStorage.deserialize(branching[id]);
     trackingPositions.forEach((trackingPosition, index) => {
       const isLast = (index === trackingPositions.length - 1);
-      const model = findByTrackingPosition(trackingPosition);
+      const model = data.findByTrackingPosition(trackingPosition);
       this.addNextModel(model, false, true, isLast);
     });
     if (this.isAtEnd) {
@@ -156,11 +152,14 @@ export default class BranchingSet {
     return cloned;
   }
 
+  /**
+   * @param {AdaptModel} nextModel
+   */
   saveNextModel(nextModel) {
     const branching = offlineStorage.get('b') || {};
     const id = this.model.get('_id');
     const trackingIds = (branching[id] && offlineStorage.deserialize(branching[id])) || [];
-    trackingIds.push(getTrackingPosition(nextModel));
+    trackingIds.push(nextModel.trackingPosition);
     branching[id] = offlineStorage.serialize(trackingIds);
     offlineStorage.set('b', branching);
   }
