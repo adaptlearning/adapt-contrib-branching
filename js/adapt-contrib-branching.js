@@ -1,6 +1,7 @@
 import Backbone from 'backbone';
 import Adapt from 'core/js/adapt';
 import data from 'core/js/data';
+import logging from 'core/js/logging';
 import ComponentModel from 'core/js/models/componentModel';
 import offlineStorage from 'core/js/offlineStorage';
 import BranchingSet from './BranchingSet';
@@ -27,10 +28,18 @@ class Branching extends Backbone.Controller {
     if (this._isAwaitingDataReady) return;
     this._isAwaitingDataReady = true;
     await data.whenReady();
+    this.warnForSpoorMisconfiguration();
     this._isAwaitingDataReady = false;
     this.setupBranchingModels();
     this.setupEventListeners();
     Adapt.trigger('branching:dataReady');
+  }
+
+  warnForSpoorMisconfiguration() {
+    const config = Adapt.config.get('_spoor');
+    const isMisConfigured = (config?._isEnabled && config?._tracking?._shouldStoreAttempts === false);
+    if (!isMisConfigured) return;
+    logging.error('Branching: Spoor is misconfigured. Branching requires _spoor._tracking._shouldStoreAttempts = true');
   }
 
   setupBranchingModels() {
@@ -49,24 +58,36 @@ class Branching extends Backbone.Controller {
       return (config._onChildren === true);
     });
     containerModels.forEach(containerModel => {
+      const containerId = containerModel.get('_id');
       containerModel.set({
         // Allow containers to request children at render
         _canRequestChild: true,
         // Prevent default completion
         _requireCompletionOf: Number.POSITIVE_INFINITY
       });
-      const children = containerModel.getChildren();
+      const children = [
+        ...containerModel.getChildren(),
+        ...data.filter(model => model.get('_branching')?._containerId === containerId)
+      ].filter(Boolean);
       // Hide all branching container original children as only clones will be displayed
       children.forEach(child => {
         const config = child.get('_branching');
         if (!config || !config._isEnabled) return;
-        child.set('_isBranchChild', true);
-        child.setOnChildren({ _isAvailable: false });
+        config._containerId = config._containerId || containerId;
+        // Make direct children unavailable
+        const isDirectChild = (child.getParent().get('_id') === containerId);
+        if (isDirectChild) child.setOnChildren({ _isAvailable: false });
+        child.set({
+          _isBranchChild: true,
+          _isBranchClone: false
+        });
         const descendants = [child].concat(child.getAllDescendantModels(true));
         // Link all branch questions to their original ids ready for
         // cloning and to facilitate save + restore
         descendants.forEach(descendant => {
           descendant.set('_branchOriginalModelId', descendant.get('_id'));
+          // Stop original items saving their own attemptStates as attemptStates are used to save/restore branching
+          if (descendant.isTypeGroup('component')) descendant.set('_shouldStoreAttempts', false);
         });
       });
       const set = new BranchingSet({ model: containerModel });

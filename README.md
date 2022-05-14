@@ -31,6 +31,8 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_onChildren** (boolean):  If set to `true`, usually on an article, its children will be used for the branching scenario.
 
+>**\_containerId** (string):  To add a block to a alternative branching set, add the branching id here. Leave this blank to use the current parent.
+
 >**\_correct** (string):  When the mandatory questions contained are all correct and complete, this is the id of the next content block.
 
 >**\_partlyCorrect** (string):  When the mandatory questions contained are partly correct and complete, this is the id of the next content block.

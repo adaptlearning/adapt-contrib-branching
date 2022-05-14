@@ -87,7 +87,7 @@ export default class BranchingSet {
       return brachingModels.find(model => model.get('_id') === nextId) || true;
     }
 
-    const originalLastChildModel = Adapt.findById(lastChildModel.get('_branchOriginalModelId'));
+    const originalLastChildModel = data.findById(lastChildModel.get('_branchOriginalModelId'));
     const nextModel = originalLastChildModel.findRelativeModel(nextId);
     const wasModelAlreadyUsed = nextModel.get('_isAvailable');
     if (wasModelAlreadyUsed) return true;
@@ -106,8 +106,12 @@ export default class BranchingSet {
     const cloned = nextModel.deepClone((clone, model) => {
       clone.set({
         _id: `${model.get('_id')}_branching_${attemptIndex}`, // Replicable ids for bookmarking
-        _isAvailable: true
+        _isAvailable: true,
+        _isBranchClone: true
       });
+      if (model === nextModel) {
+        clone.set('_parentId', this.model.get('_id'));
+      }
       // Remove tracking ids as these will change depending on the branches
       // Clone attempt states are stored on the original model in their order of occurance
       if (clone.has('_trackingId')) {
@@ -144,8 +148,6 @@ export default class BranchingSet {
         cloned.setCompletionStatus();
       }
     }
-    // Add the cloned model to the parent hierarchy
-    nextModel.getParent().getChildren().add(cloned);
     if (shouldSave) {
       this.saveNextModel(nextModel);
     }
@@ -165,18 +167,22 @@ export default class BranchingSet {
   }
 
   get models() {
-    return this.model.getChildren().filter(model => {
-      if (model.get('_isAvailable')) return false;
+    const containerId = this.model.get('_id');
+    return data.filter(model => {
+      if (model.get('_isBranchClone')) return false;
       const config = model.get('_branching');
-      return (config && config._isEnabled !== false);
+      if (!config || config._isEnabled === false) return false;
+      return (config._containerId === containerId);
     });
   }
 
   get branchedModels() {
-    return this.model.getChildren().filter(model => {
-      if (!model.get('_isAvailable')) return false;
+    const containerId = this.model.get('_id');
+    return data.filter(model => {
+      if (!model.get('_isBranchClone')) return false;
       const config = model.get('_branching');
-      return (config && config._isEnabled !== false);
+      if (!config || config._isEnabled === false) return false;
+      return (config._containerId === containerId);
     });
   }
 
