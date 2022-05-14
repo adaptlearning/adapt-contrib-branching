@@ -2,6 +2,7 @@ import Backbone from 'backbone';
 import Adapt from 'core/js/adapt';
 import data from 'core/js/data';
 import ComponentModel from 'core/js/models/componentModel';
+import offlineStorage from 'core/js/offlineStorage';
 import BranchingSet from './BranchingSet';
 
 class Branching extends Backbone.Controller {
@@ -186,9 +187,9 @@ class Branching extends Backbone.Controller {
     if (!(model instanceof ComponentModel)) return;
     const branchOriginModelId = model.get('_branchOriginalModelId');
     if (!branchOriginModelId) return;
-    const originModel = Adapt.findById(branchOriginModelId);
+    const originModel = data.findById(branchOriginModelId);
     originModel.addAttemptObject(model.getAttemptObject());
-    Adapt.offlineStorage.save();
+    offlineStorage.save();
   }
 
 }

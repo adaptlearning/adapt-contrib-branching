@@ -8,6 +8,7 @@ import {
 import {
   getCorrectness
 } from './correctness';
+import offlineStorage from 'core/js/offlineStorage';
 
 /** @typedef {import("core/js/models/adaptModel").default} AdaptModel */
 
@@ -30,11 +31,11 @@ export default class BranchingSet {
   }
 
   restore() {
-    const branching = Adapt.offlineStorage.get('b');
+    const branching = offlineStorage.get('b');
     if (!branching) return;
     const id = this.model.get('_id');
     if (!branching[id]) return;
-    const trackingPositions = Adapt.offlineStorage.deserialize(branching[id]);
+    const trackingPositions = offlineStorage.deserialize(branching[id]);
     trackingPositions.forEach((trackingPosition, index) => {
       const isLast = (index === trackingPositions.length - 1);
       const model = findByTrackingPosition(trackingPosition);
@@ -156,12 +157,12 @@ export default class BranchingSet {
   }
 
   saveNextModel(nextModel) {
-    const branching = Adapt.offlineStorage.get('b') || {};
+    const branching = offlineStorage.get('b') || {};
     const id = this.model.get('_id');
-    const trackingIds = (branching[id] && Adapt.offlineStorage.deserialize(branching[id])) || [];
+    const trackingIds = (branching[id] && offlineStorage.deserialize(branching[id])) || [];
     trackingIds.push(getTrackingPosition(nextModel));
-    branching[id] = Adapt.offlineStorage.serialize(trackingIds);
-    Adapt.offlineStorage.set('b', branching);
+    branching[id] = offlineStorage.serialize(trackingIds);
+    offlineStorage.set('b', branching);
   }
 
   get models() {
@@ -195,12 +196,12 @@ export default class BranchingSet {
     if (this._isInReset) return;
     this._isInReset = true;
     this.model.set('_requireCompletionOf', Number.POSITIVE_INFINITY);
-    const parentView = Adapt.findViewByModelId(this.model.get('_id'));
+    const parentView = data.findViewByModelId(this.model.get('_id'));
     const childViews = parentView?.getChildViews();
     const branchedModels = this.branchedModels;
     branchedModels.forEach(model => {
       if (Adapt.parentView && removeViews) {
-        const view = Adapt.findViewByModelId(model.get('_id'));
+        const view = data.findViewByModelId(model.get('_id'));
         if (view) {
           view.remove();
           childViews.splice(childViews.findIndex(v => v === view), 1);
@@ -211,11 +212,11 @@ export default class BranchingSet {
     });
     this.model.getChildren().remove(branchedModels);
     this.model.findDescendantModels('component').forEach(model => model.set('_attemptStates', []));
-    const branching = Adapt.offlineStorage.get('b') || {};
+    const branching = offlineStorage.get('b') || {};
     const id = this.model.get('_id');
     const trackingIds = [];
-    branching[id] = Adapt.offlineStorage.serialize(trackingIds);
-    Adapt.offlineStorage.set('b', branching);
+    branching[id] = offlineStorage.serialize(trackingIds);
+    offlineStorage.set('b', branching);
     this.addFirstModel();
     await Adapt.parentView?.addChildren();
     Adapt.checkingCompletion();
