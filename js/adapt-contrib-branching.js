@@ -38,7 +38,7 @@ class Branching extends Backbone.Controller {
   warnForSpoorMisconfiguration() {
     const config = Adapt.config.get('_spoor');
     const isMisconfigured = (config?._isEnabled && config?._tracking?._shouldStoreAttempts === false);
-    if (!isMisConfigured) return;
+    if (!isMisconfigured) return;
     logging.error('Branching: Spoor is misconfigured. Branching requires _spoor._tracking._shouldStoreAttempts = true');
   }
 
