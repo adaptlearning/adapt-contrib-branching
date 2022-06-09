@@ -160,6 +160,7 @@ class Branching extends Backbone.Controller {
    */
   checkIfIsEffectivelyComplete(model) {
     const childModel = model.getParent();
+    if (!childModel) return;
     const isBranchChild = childModel.get('_isBranchChild');
     if (!isBranchChild) return;
     const requireCompletionOf = childModel.get('_requireCompletionOf');
