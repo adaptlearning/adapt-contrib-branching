@@ -192,6 +192,8 @@ export default class BranchingSet {
   }
 
   async reset({ removeViews = false } = {}) {
+    if (this._isInReset) return;
+    this._isInReset = true;
     this.model.set('_requireCompletionOf', Number.POSITIVE_INFINITY);
     const parentView = Adapt.findViewByModelId(this.model.get('_id'));
     const childViews = parentView?.getChildViews();
@@ -218,6 +220,7 @@ export default class BranchingSet {
     await Adapt.parentView?.addChildren();
     Adapt.checkingCompletion();
     this.model.checkCompletionStatusFor('_isComplete');
+    this._isInReset = false;
     return true;
   }
 
