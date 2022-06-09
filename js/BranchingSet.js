@@ -2,12 +2,9 @@ import Adapt from 'core/js/adapt';
 import data from 'core/js/data';
 import ComponentModel from 'core/js/models/componentModel';
 import {
-  getTrackingPosition,
-  findByTrackingPosition
-} from './trackingPosition';
-import {
   getCorrectness
 } from './correctness';
+import offlineStorage from 'core/js/offlineStorage';
 
 /** @typedef {import("core/js/models/adaptModel").default} AdaptModel */
 
@@ -30,14 +27,14 @@ export default class BranchingSet {
   }
 
   restore() {
-    const branching = Adapt.offlineStorage.get('b');
+    const branching = offlineStorage.get('b');
     if (!branching) return;
     const id = this.model.get('_id');
     if (!branching[id]) return;
-    const trackingPositions = Adapt.offlineStorage.deserialize(branching[id]);
+    const trackingPositions = offlineStorage.deserialize(branching[id]);
     trackingPositions.forEach((trackingPosition, index) => {
       const isLast = (index === trackingPositions.length - 1);
-      const model = findByTrackingPosition(trackingPosition);
+      const model = data.findByTrackingPosition(trackingPosition);
       this.addNextModel(model, false, true, isLast);
     });
     if (this.isAtEnd) {
@@ -90,7 +87,7 @@ export default class BranchingSet {
       return brachingModels.find(model => model.get('_id') === nextId) || true;
     }
 
-    const originalLastChildModel = Adapt.findById(lastChildModel.get('_branchOriginalModelId'));
+    const originalLastChildModel = data.findById(lastChildModel.get('_branchOriginalModelId'));
     const nextModel = originalLastChildModel.findRelativeModel(nextId);
     const wasModelAlreadyUsed = nextModel.get('_isAvailable');
     if (wasModelAlreadyUsed) return true;
@@ -109,8 +106,12 @@ export default class BranchingSet {
     const cloned = nextModel.deepClone((clone, model) => {
       clone.set({
         _id: `${model.get('_id')}_branching_${attemptIndex}`, // Replicable ids for bookmarking
-        _isAvailable: true
+        _isAvailable: true,
+        _isBranchClone: true
       });
+      if (model === nextModel) {
+        clone.set('_parentId', this.model.get('_id'));
+      }
       // Remove tracking ids as these will change depending on the branches
       // Clone attempt states are stored on the original model in their order of occurance
       if (clone.has('_trackingId')) {
@@ -147,36 +148,41 @@ export default class BranchingSet {
         cloned.setCompletionStatus();
       }
     }
-    // Add the cloned model to the parent hierarchy
-    nextModel.getParent().getChildren().add(cloned);
     if (shouldSave) {
       this.saveNextModel(nextModel);
     }
     return cloned;
   }
 
+  /**
+   * @param {AdaptModel} nextModel
+   */
   saveNextModel(nextModel) {
-    const branching = Adapt.offlineStorage.get('b') || {};
+    const branching = offlineStorage.get('b') || {};
     const id = this.model.get('_id');
-    const trackingIds = (branching[id] && Adapt.offlineStorage.deserialize(branching[id])) || [];
-    trackingIds.push(getTrackingPosition(nextModel));
-    branching[id] = Adapt.offlineStorage.serialize(trackingIds);
-    Adapt.offlineStorage.set('b', branching);
+    const trackingIds = (branching[id] && offlineStorage.deserialize(branching[id])) || [];
+    trackingIds.push(nextModel.trackingPosition);
+    branching[id] = offlineStorage.serialize(trackingIds);
+    offlineStorage.set('b', branching);
   }
 
   get models() {
-    return this.model.getChildren().filter(model => {
-      if (model.get('_isAvailable')) return false;
+    const containerId = this.model.get('_id');
+    return data.filter(model => {
+      if (model.get('_isBranchClone')) return false;
       const config = model.get('_branching');
-      return (config && config._isEnabled !== false);
+      if (!config || config._isEnabled === false) return false;
+      return (config._containerId === containerId);
     });
   }
 
   get branchedModels() {
-    return this.model.getChildren().filter(model => {
-      if (!model.get('_isAvailable')) return false;
+    const containerId = this.model.get('_id');
+    return data.filter(model => {
+      if (!model.get('_isBranchClone')) return false;
       const config = model.get('_branching');
-      return (config && config._isEnabled !== false);
+      if (!config || config._isEnabled === false) return false;
+      return (config._containerId === containerId);
     });
   }
 
@@ -195,12 +201,12 @@ export default class BranchingSet {
     if (this._isInReset) return;
     this._isInReset = true;
     this.model.set('_requireCompletionOf', Number.POSITIVE_INFINITY);
-    const parentView = Adapt.findViewByModelId(this.model.get('_id'));
+    const parentView = data.findViewByModelId(this.model.get('_id'));
     const childViews = parentView?.getChildViews();
     const branchedModels = this.branchedModels;
     branchedModels.forEach(model => {
       if (Adapt.parentView && removeViews) {
-        const view = Adapt.findViewByModelId(model.get('_id'));
+        const view = data.findViewByModelId(model.get('_id'));
         if (view) {
           view.remove();
           childViews.splice(childViews.findIndex(v => v === view), 1);
@@ -211,11 +217,11 @@ export default class BranchingSet {
     });
     this.model.getChildren().remove(branchedModels);
     this.model.findDescendantModels('component').forEach(model => model.set('_attemptStates', []));
-    const branching = Adapt.offlineStorage.get('b') || {};
+    const branching = offlineStorage.get('b') || {};
     const id = this.model.get('_id');
     const trackingIds = [];
-    branching[id] = Adapt.offlineStorage.serialize(trackingIds);
-    Adapt.offlineStorage.set('b', branching);
+    branching[id] = offlineStorage.serialize(trackingIds);
+    offlineStorage.set('b', branching);
     this.addFirstModel();
     await Adapt.parentView?.addChildren();
     Adapt.checkingCompletion();

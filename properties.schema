@@ -53,6 +53,13 @@
                   "title": "Enable branching to/from this block",
                   "inputType": "Checkbox"
                 },
+                "_containerId": {
+                  "type": "string",
+                  "default": "",
+                  "title": "Alternate branching container id",
+                  "inputType": "Text",
+                  "help": "Leave blank to use the current article"
+                },
                 "_correct": {
                   "type": "string",
                   "default": "",
