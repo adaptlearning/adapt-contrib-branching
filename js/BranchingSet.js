@@ -133,7 +133,7 @@ export default class BranchingSet {
     }
 
     const lastChildModel = branchedModels[branchedModels.length - 1];
-    const isLastIncomplete = !lastChildModel.get('_isComplete') || !lastChildModel.get('_isOptional');
+    const isLastIncomplete = !lastChildModel.get('_isComplete') && !lastChildModel.get('_isOptional');
     if (isLastIncomplete && !isTheoretical) {
       return false;
     }
