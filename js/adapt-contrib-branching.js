@@ -9,6 +9,7 @@ import BranchingSet from './BranchingSet';
 class Branching extends Backbone.Controller {
 
   initialize() {
+    /** @type {[BranchingSet]} */
     this._rawSets = [];
     this.openPopupCount = 0;
     this.shouldContinueOnPopupClose = false;
@@ -58,41 +59,10 @@ class Branching extends Backbone.Controller {
       return (config._onChildren === true);
     });
     containerModels.forEach(containerModel => {
-      const containerId = containerModel.get('_id');
-      containerModel.set({
-        // Allow containers to request children at render
-        _canRequestChild: true,
-        // Prevent default completion
-        _requireCompletionOf: Number.POSITIVE_INFINITY
-      });
-      const children = [
-        ...containerModel.getChildren(),
-        ...data.filter(model => model.get('_branching')?._containerId === containerId)
-      ].filter(Boolean);
-      // Hide all branching container original children as only clones will be displayed
-      children.forEach(child => {
-        const config = child.get('_branching');
-        if (!config || !config._isEnabled) return;
-        config._containerId = config._containerId || containerId;
-        // Make direct children unavailable
-        const isDirectChild = (child.getParent().get('_id') === containerId);
-        if (isDirectChild) child.setOnChildren({ _isAvailable: false });
-        child.set({
-          _isBranchChild: true,
-          _isBranchClone: false
-        });
-        const descendants = [child].concat(child.getAllDescendantModels(true));
-        // Link all branch questions to their original ids ready for
-        // cloning and to facilitate save + restore
-        descendants.forEach(descendant => {
-          descendant.set('_branchOriginalModelId', descendant.get('_id'));
-          // Stop original items saving their own attemptStates as attemptStates are used to save/restore branching
-          if (descendant.isTypeGroup('component')) descendant.set('_shouldStoreAttempts', false);
-        });
-      });
       const set = new BranchingSet({ model: containerModel });
       this._rawSets.push(set);
     });
+    this._rawSets.forEach(set => set.initialize());
   }
 
   get subsets() {
@@ -100,7 +70,7 @@ class Branching extends Backbone.Controller {
   }
 
   getSubsetByModelId(modelId) {
-    return this._rawSets.find(set => set.model.get('_id') === modelId);
+    return this._rawSets.find(set => set.model.get('_id') === modelId || set.models.find(model => model.get('_id') === modelId));
   }
 
   setupEventListeners() {
@@ -111,6 +81,7 @@ class Branching extends Backbone.Controller {
   onRequestChild(event) {
     const set = this.getSubsetByModelId(event.target.model.get('_id'));
     if (!set) return;
+    set.checkResetOnStartChange();
     const nextModel = set.getNextModel();
     if (nextModel === false) {
       // Previous model isn't complete
@@ -118,9 +89,7 @@ class Branching extends Backbone.Controller {
     }
     if (nextModel === true) {
       // No further models, manually check completion of branching container
-      const containerModel = event.target.model;
-      containerModel.set('_requireCompletionOf', -1);
-      containerModel.checkCompletionStatus();
+      set.enableParentCompletion();
       return;
     }
     const clonedModel = set.addNextModel(nextModel);
@@ -185,24 +154,11 @@ class Branching extends Backbone.Controller {
     if (!childModel) return;
     const isBranchChild = childModel.get('_isBranchChild');
     if (!isBranchChild) return;
-    const requireCompletionOf = childModel.get('_requireCompletionOf');
-    const hasStandardCompletionCriteria = (requireCompletionOf !== -1);
-    if (hasStandardCompletionCriteria) return;
-    // Excludes non-trackable extension components, like trickle buttons
-    const areAllAvailableTrackableChildrenComplete = childModel.getChildren()
-      .filter(model => model.get('_isAvailble') && model.get('_isTrackable'))
-      .every(model => model.get('_isComplete'));
-    if (!areAllAvailableTrackableChildrenComplete) return;
     const containerModel = childModel.getParent();
     const set = this.getSubsetByModelId(containerModel.get('_id'));
-    const isInValidBranchingSet = Boolean(set);
-    if (!isInValidBranchingSet) return;
-    const nextModel = set.getNextModel({ isTheoretical: true });
-    const isBranchingFinished = (nextModel === true);
-    if (!isBranchingFinished) return;
+    if (!set?.isEffectivelyComplete) return;
     // Allow assessment to complete at the end, before the last trickle button is clicked
-    containerModel.set('_requireCompletionOf', -1);
-    containerModel.checkCompletionStatus();
+    set.enableParentCompletion();
   }
 
   saveBranchQuestionAttemptHistory(model) {
