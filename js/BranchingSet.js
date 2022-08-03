@@ -47,7 +47,7 @@ export default class BranchingSet {
 
   initialize() {
     this._wasInitialized = true;
-    this.preventParentCompletion();
+    this.disableParentCompletion();
     const wasRestored = this.restore();
     if (wasRestored) {
       // Check if the next model needs loading, this will happen if the previous
@@ -61,7 +61,7 @@ export default class BranchingSet {
     this.addFirstModel();
   }
 
-  preventParentCompletion() {
+  disableParentCompletion() {
     this.model.set({
       _canRequestChild: true,
       _requireCompletionOf: Number.POSITIVE_INFINITY
@@ -293,7 +293,7 @@ export default class BranchingSet {
   async reset({ removeViews = false } = {}) {
     if (this._isInReset || !this._wasInitialized) return;
     this._isInReset = true;
-    this.preventParentCompletion();
+    this.disableParentCompletion();
     const parentView = data.findViewByModelId(this.model.get('_id'));
     const childViews = parentView?.getChildViews();
     const branchedModels = this.branchedModels;
