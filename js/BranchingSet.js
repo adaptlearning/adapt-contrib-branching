@@ -164,7 +164,7 @@ export default class BranchingSet {
     if (nextModel === undefined) {
       // Set the start block of a different branching set
       const nextBranchingSet = Adapt.branching.getSubsetByModelId(nextId);
-      if (!nextBranchingSet) throw new Error(`Cannot branching to a model without a branching set: ${nextId} from ${lastChildModel.get('_id')}`);
+      if (!nextBranchingSet) throw new Error(`Cannot branch to a model that isn't contained in a branching set: ${nextId} from ${lastChildModel.get('_id')}`);
       if (!isTheoretical) nextBranchingSet.startId = nextId;
       // Mark as finished
       return true;
