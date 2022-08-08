@@ -8,7 +8,8 @@
   "_branching": {
     "_isEnabled": true,
     "_onChildren": true,
-    "_start": "b-250"
+    "_comment": "Leave _start blank to start on the first block in the article",
+    "_start": ""
   },
 
 // blocks.json
