@@ -279,7 +279,7 @@ export default class BranchingSet {
       if (hasStandardCompletionCriteria) return false;
       // Excludes non-trackable extension components, like trickle buttons
       const areAllAvailableTrackableChildrenComplete = childModel.getChildren()
-        .filter(model => model.get('_isAvailble') && model.get('_isTrackable'))
+        .filter(model => model.get('_isAvailable') && model.get('_isTrackable'))
         .every(model => model.get('_isComplete') || model.get('_isOptional'));
       return areAllAvailableTrackableChildrenComplete;
     });
