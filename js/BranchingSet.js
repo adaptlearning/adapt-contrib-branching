@@ -5,6 +5,7 @@ import {
   getCorrectness
 } from './correctness';
 import offlineStorage from 'core/js/offlineStorage';
+import logging from 'core/js/logging';
 
 /** @typedef {import("core/js/models/adaptModel").default} AdaptModel */
 
@@ -164,7 +165,10 @@ export default class BranchingSet {
     if (nextModel === undefined) {
       // Set the start block of a different branching set
       const nextBranchingSet = Adapt.branching.getSubsetByModelId(nextId);
-      if (!nextBranchingSet) throw new Error(`Cannot branch to a model that isn't contained in a branching set: ${nextId} from ${lastChildModel.get('_id')}`);
+      if (!nextBranchingSet) {
+        logging.error(`Cannot branch to a model that isn't contained in a branching set: ${nextId} from ${lastChildModel.get('_id')}`);
+        return;
+      }
       if (!isTheoretical) nextBranchingSet.startId = nextId;
       // Mark as finished
       return true;
