@@ -140,7 +140,7 @@ export default class BranchingSet {
     }
 
     const lastChildConfig = lastChildModel.get('_branching');
-    if (!lastChildConfig || !lastChildConfig._isEnabled) return true;
+    if (!lastChildConfig) return true;
 
     // Branch from the last model's correctness, if configured
     const correctness = getCorrectness(lastChildModel);
@@ -254,7 +254,7 @@ export default class BranchingSet {
     return data.filter(model => {
       if (model.get('_isBranchClone')) return false;
       const config = model.get('_branching');
-      if (!config || config._isEnabled === false) return false;
+      if (!config) return false;
       return (config._containerId === containerId);
     });
   }
@@ -264,7 +264,7 @@ export default class BranchingSet {
     return data.filter(model => {
       if (!model.get('_isBranchClone')) return false;
       const config = model.get('_branching');
-      if (!config || config._isEnabled === false) return false;
+      if (!config) return false;
       return (config._containerId === containerId);
     });
   }
