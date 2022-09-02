@@ -121,15 +121,15 @@ export default class BranchingSet {
 
   getNextModel({ isTheoretical = false } = {}) {
     const config = this.model.get('_branching');
-    const brachingModels = this.models;
+    const branchingModels = this.models;
     const branchedModels = this.branchedModels;
 
     const isBeforeStart = !branchedModels.length;
     if (isBeforeStart) {
       const hasStartId = Boolean(config._start);
       const firstModel = hasStartId ?
-        brachingModels.find(model => model.get('_id') === config._start) :
-        brachingModels[0];
+        branchingModels.find(model => model.get('_id') === config._start) :
+        branchingModels[0];
       return firstModel;
     }
 
@@ -150,7 +150,7 @@ export default class BranchingSet {
     function findNextModel(nextId) {
       const isRelativeId = nextId.includes('@');
       if (!isRelativeId) {
-        return brachingModels.find(model => model.get('_id') === nextId);
+        return branchingModels.find(model => model.get('_id') === nextId);
       }
       const originalLastChildModel = data.findById(lastChildModel.get('_branchOriginalModelId'));
       const nextModel = originalLastChildModel.findRelativeModel(nextId);
