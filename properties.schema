@@ -47,12 +47,6 @@
               "type": "object",
               "legend": "Branching",
               "properties": {
-                "_isEnabled": {
-                  "type": "boolean",
-                  "default": true,
-                  "title": "Enable branching to/from this block",
-                  "inputType": "Checkbox"
-                },
                 "_containerId": {
                   "type": "string",
                   "default": "",
