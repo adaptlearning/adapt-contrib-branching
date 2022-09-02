@@ -2,7 +2,7 @@
 
 **Branching** is an *extension* which is *not* bundled with the [Adapt framework](https://github.com/adaptlearning/adapt_framework).
 
-The **Branching** extension allows an article to contain a series of blocks which branch according to question answers. Using **Branching**, a course author may create a dynamic experience based upon user responses.
+The **Branching** extension allows an article to contain a series of blocks which branch according to block correctness. Using **Branching**, a course author may create a dynamic experience based upon user responses.
 
 ## Installation
 
