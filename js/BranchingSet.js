@@ -26,7 +26,7 @@ export default class BranchingSet {
     // Hide all branching container original children as only clones will be displayed
     children.forEach(child => {
       const config = child.get('_branching');
-      if (!config || !config._isEnabled) return;
+      if (!config) return;
       config._containerId = config._containerId || containerId;
       // Make direct children unavailable
       const isDirectChild = (child.getParent().get('_id') === containerId);
@@ -167,7 +167,7 @@ export default class BranchingSet {
       const nextBranchingSet = Adapt.branching.getSubsetByModelId(nextId);
       if (!nextBranchingSet) {
         logging.error(`Cannot branch to a model that isn't contained in a branching set: ${nextId} from ${lastChildModel.get('_id')}`);
-        return;
+        return true;
       }
       if (!isTheoretical) nextBranchingSet.startId = nextId;
       // Mark as finished
