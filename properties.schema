@@ -35,15 +35,15 @@
                   "default": false,
                   "title": "Enable branching within this article",
                   "inputType": "Checkbox"
+                },
+                "_start": {
+                  "type": "string",
+                  "default": "",
+                  "title": "Start block id",
+                  "inputType": "Text",
+                  "help": "Leave blank to use the first block"
                 }
               }
-            },
-            "_start": {
-              "type": "string",
-              "default": "",
-              "title": "Start block id",
-              "inputType": "Text",
-              "help": "Leave blank to use the first block"
             }
           }
         },
