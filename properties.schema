@@ -37,6 +37,13 @@
                   "inputType": "Checkbox"
                 }
               }
+            },
+            "_start": {
+              "type": "string",
+              "default": "",
+              "title": "Start block id",
+              "inputType": "Text",
+              "help": "Leave blank to use the first block"
             }
           }
         },
