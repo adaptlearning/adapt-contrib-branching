@@ -1,6 +1,6 @@
 {
   "name": "adapt-contrib-branching",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "framework": ">=5.19.1",
   "homepage": "https://github.com/adaptlearning/adapt-contrib-branching",
   "issues": "https://github.com/adaptlearning/adapt_framework/issues/new",
