@@ -92,7 +92,7 @@ export default class BranchingSet {
     const config = this.model.get('_branching');
     if (!config._start) return;
     const isAtCorrectStart = (this.isAtStart && this.branchedModels[0]?.get('_branchOriginalModelId') === config._start);
-    if (isAtCorrectStart || !this.isAtStart || this.isAtEnd) return;
+    if (isAtCorrectStart || !this.isAtStart || this.isEffectivelyComplete) return;
     this.reset({ removeViews: true });
   }
 
@@ -283,7 +283,7 @@ export default class BranchingSet {
       if (hasStandardCompletionCriteria) return false;
       // Excludes non-trackable extension components, like trickle buttons
       const areAllAvailableTrackableChildrenComplete = childModel.getChildren()
-        .filter(model => model.get('_isAvailable') && model.get('_isTrackable'))
+        .filter(model => model.get('_isAvailable') && model.get('_isTrackable') !== false)
         .every(model => model.get('_isComplete') || model.get('_isOptional'));
       return areAllAvailableTrackableChildrenComplete;
     });
