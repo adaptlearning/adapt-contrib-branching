@@ -15,7 +15,6 @@
 // blocks.json
 
   "_branching": {
-    "_isEnabled": true,
     "_containerId": "",
     "__comment": "leave _containerId blank to use the article _id",
     "_correct": "b-255",

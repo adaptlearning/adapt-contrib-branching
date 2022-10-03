@@ -5,6 +5,7 @@ import {
   getCorrectness
 } from './correctness';
 import offlineStorage from 'core/js/offlineStorage';
+import logging from 'core/js/logging';
 
 /** @typedef {import("core/js/models/adaptModel").default} AdaptModel */
 
@@ -13,6 +14,41 @@ export default class BranchingSet {
   constructor(options = {}) {
     /** @type {AdaptModel} */
     this.model = options.model;
+    this.setupModels();
+  }
+
+  setupModels() {
+    const containerId = this.model.get('_id');
+    const children = [
+      ...this.model.getChildren(),
+      ...data.filter(model => model.get('_branching')?._containerId === containerId)
+    ].filter(Boolean);
+    // Hide all branching container original children as only clones will be displayed
+    children.forEach(child => {
+      const config = child.get('_branching');
+      if (!config) return;
+      config._containerId = config._containerId || containerId;
+      // Make direct children unavailable
+      const isDirectChild = (child.getParent().get('_id') === containerId);
+      if (isDirectChild) child.setOnChildren({ _isAvailable: false });
+      child.set({
+        _isBranchChild: true,
+        _isBranchClone: false
+      });
+      const descendants = [child].concat(child.getAllDescendantModels(true));
+      // Link all branch questions to their original ids ready for
+      // cloning and to facilitate save + restore
+      descendants.forEach(descendant => {
+        descendant.set('_branchOriginalModelId', descendant.get('_id'));
+        // Stop original items saving their own attemptStates as attemptStates are used to save/restore branching
+        if (descendant.isTypeGroup('component')) descendant.set('_shouldStoreAttempts', false);
+      });
+    });
+  }
+
+  initialize() {
+    this._wasInitialized = true;
+    this.disableParentCompletion();
     const wasRestored = this.restore();
     if (wasRestored) {
       // Check if the next model needs loading, this will happen if the previous
@@ -24,6 +60,40 @@ export default class BranchingSet {
       return;
     }
     this.addFirstModel();
+  }
+
+  disableParentCompletion() {
+    this.model.set({
+      _canRequestChild: true,
+      _requireCompletionOf: Number.POSITIVE_INFINITY
+    });
+  }
+
+  enableParentCompletion() {
+    this.model.set('_requireCompletionOf', -1);
+    // Synchronously check completion, this.model.checkCompletionStatus is async
+    Adapt.checkingCompletion();
+    this.model.checkCompletionStatusFor('_isComplete');
+    Adapt.checkingCompletion();
+    this.model.checkCompletionStatusFor('_isInteractionComplete');
+  }
+
+  get startId() {
+    return this.model.get('_branching')?._start;
+  }
+
+  set startId(modelId) {
+    const config = this.model.get('_branching');
+    if (!config) return;
+    config._start = modelId;
+  }
+
+  checkResetOnStartChange() {
+    const config = this.model.get('_branching');
+    if (!config._start) return;
+    const isAtCorrectStart = (this.isAtStart && this.branchedModels[0]?.get('_branchOriginalModelId') === config._start);
+    if (isAtCorrectStart || !this.isAtStart || this.isEffectivelyComplete) return;
+    this.reset({ removeViews: true });
   }
 
   restore() {
@@ -38,12 +108,7 @@ export default class BranchingSet {
       this.addNextModel(model, false, true, isLast);
     });
     if (this.isAtEnd) {
-      this.model.set('_requireCompletionOf', -1);
-      // Synchronously check completion, this.model.checkCompletionStatus is async
-      Adapt.checkingCompletion();
-      this.model.checkCompletionStatusFor('_isComplete');
-      Adapt.checkingCompletion();
-      this.model.checkCompletionStatusFor('_isInteractionComplete');
+      this.enableParentCompletion();
     }
     return true;
   }
@@ -56,41 +121,59 @@ export default class BranchingSet {
 
   getNextModel({ isTheoretical = false } = {}) {
     const config = this.model.get('_branching');
-    const brachingModels = this.models;
+    const branchingModels = this.models;
     const branchedModels = this.branchedModels;
 
     const isBeforeStart = !branchedModels.length;
     if (isBeforeStart) {
       const hasStartId = Boolean(config._start);
       const firstModel = hasStartId ?
-        brachingModels.find(model => model.get('_id') === config._start) :
-        brachingModels[0];
+        branchingModels.find(model => model.get('_id') === config._start) :
+        branchingModels[0];
       return firstModel;
     }
 
     const lastChildModel = branchedModels[branchedModels.length - 1];
-    const isLastIncomplete = !lastChildModel.get('_isComplete');
+    const isLastIncomplete = !lastChildModel.get('_isComplete') && !lastChildModel.get('_isOptional');
     if (isLastIncomplete && !isTheoretical) {
       return false;
     }
 
     const lastChildConfig = lastChildModel.get('_branching');
-    if (!lastChildConfig || !lastChildConfig._isEnabled) return true;
+    if (!lastChildConfig) return true;
 
     // Branch from the last model's correctness, if configured
     const correctness = getCorrectness(lastChildModel);
     const nextId = lastChildConfig._force || lastChildConfig[`_${correctness}`];
     if (!nextId) return true;
 
-    const isRelativeId = nextId.includes('@');
-    if (!isRelativeId) {
-      return brachingModels.find(model => model.get('_id') === nextId) || true;
+    function findNextModel(nextId) {
+      const isRelativeId = nextId.includes('@');
+      if (!isRelativeId) {
+        return branchingModels.find(model => model.get('_id') === nextId);
+      }
+      const originalLastChildModel = data.findById(lastChildModel.get('_branchOriginalModelId'));
+      const nextModel = originalLastChildModel.findRelativeModel(nextId);
+      const wasModelAlreadyUsed = nextModel.get('_isAvailable');
+      if (wasModelAlreadyUsed) return true;
+      return nextModel;
     }
 
-    const originalLastChildModel = data.findById(lastChildModel.get('_branchOriginalModelId'));
-    const nextModel = originalLastChildModel.findRelativeModel(nextId);
-    const wasModelAlreadyUsed = nextModel.get('_isAvailable');
-    if (wasModelAlreadyUsed) return true;
+    const nextModel = findNextModel(nextId);
+    // Mark as finished
+    if (nextModel === true) return true;
+    if (nextModel === undefined) {
+      // Set the start block of a different branching set
+      const nextBranchingSet = Adapt.branching.getSubsetByModelId(nextId);
+      if (!nextBranchingSet) {
+        logging.error(`Cannot branch to a model that isn't contained in a branching set: ${nextId} from ${lastChildModel.get('_id')}`);
+        return true;
+      }
+      if (!isTheoretical) nextBranchingSet.startId = nextId;
+      // Mark as finished
+      return true;
+    }
+    // Provide the next model
     return nextModel;
   }
 
@@ -143,7 +226,7 @@ export default class BranchingSet {
     if (isAnyPartRestored) {
       // Make sure to explicitly set the block to complete if complete
       // This helps trickle setup locking correctly
-      const areAllDescendantsComplete = cloned.getAllDescendantModels(true).every(model => model.get('_isComplete'));
+      const areAllDescendantsComplete = cloned.getAllDescendantModels(true).every(model => model.get('_isComplete') || model.get('_isOptional'));
       if (areAllDescendantsComplete) {
         cloned.setCompletionStatus();
       }
@@ -171,7 +254,7 @@ export default class BranchingSet {
     return data.filter(model => {
       if (model.get('_isBranchClone')) return false;
       const config = model.get('_branching');
-      if (!config || config._isEnabled === false) return false;
+      if (!config) return false;
       return (config._containerId === containerId);
     });
   }
@@ -181,7 +264,7 @@ export default class BranchingSet {
     return data.filter(model => {
       if (!model.get('_isBranchClone')) return false;
       const config = model.get('_branching');
-      if (!config || config._isEnabled === false) return false;
+      if (!config) return false;
       return (config._containerId === containerId);
     });
   }
@@ -193,14 +276,28 @@ export default class BranchingSet {
     return (firstChild === lastChild);
   }
 
+  get isEffectivelyComplete() {
+    const isEffectivelyComplete = this.branchedModels.every(childModel => {
+      const requireCompletionOf = childModel.get('_requireCompletionOf');
+      const hasStandardCompletionCriteria = (requireCompletionOf !== -1);
+      if (hasStandardCompletionCriteria) return false;
+      // Excludes non-trackable extension components, like trickle buttons
+      const areAllAvailableTrackableChildrenComplete = childModel.getChildren()
+        .filter(model => model.get('_isAvailable') && model.get('_isTrackable') !== false)
+        .every(model => model.get('_isComplete') || model.get('_isOptional'));
+      return areAllAvailableTrackableChildrenComplete;
+    });
+    return isEffectivelyComplete && this.isAtEnd;
+  }
+
   get isAtEnd() {
-    return (this.getNextModel() === true);
+    return (this.getNextModel({ isTheoretical: true }) === true);
   }
 
   async reset({ removeViews = false } = {}) {
-    if (this._isInReset) return;
+    if (this._isInReset || !this._wasInitialized) return;
     this._isInReset = true;
-    this.model.set('_requireCompletionOf', Number.POSITIVE_INFINITY);
+    this.disableParentCompletion();
     const parentView = data.findViewByModelId(this.model.get('_id'));
     const childViews = parentView?.getChildViews();
     const branchedModels = this.branchedModels;
@@ -215,6 +312,7 @@ export default class BranchingSet {
       }
       data.remove(model);
     });
+    if (removeViews) parentView?.setChildViews(childViews);
     this.model.getChildren().remove(branchedModels);
     this.model.findDescendantModels('component').forEach(model => model.set('_attemptStates', []));
     const branching = offlineStorage.get('b') || {};
