@@ -1,0 +1,26 @@
+{
+  "$anchor": "_branching-course",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "$patch": {
+    "source": {
+      "$ref": "course"
+    },
+    "with": {
+      "properties": {
+        "_branching": {
+          "type": "object",
+          "title": "Branching",
+          "default": {},
+          "properties": {
+            "_isEnabled": {
+              "type": "boolean",
+              "title": "Enable branching globally",
+              "default": true
+            }
+          }
+        }
+      }
+    }
+  }
+}
