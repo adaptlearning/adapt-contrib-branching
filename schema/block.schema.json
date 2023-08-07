@@ -1,0 +1,45 @@
+{
+  "$anchor": "_branching-block",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "$patch": {
+    "source": {
+      "$ref": "block"
+    },
+    "with": {
+      "properties": {
+        "_branching": {
+          "type": "object",
+          "title": "Branching",
+          "default": {},
+          "properties": {
+            "_containerId": {
+              "type": "string",
+              "title": "Alternate branching container id",
+              "description": "Leave blank to use the current article",
+              "default": ""
+            },
+            "_correct": {
+              "type": "string",
+              "title": "Correct target",
+              "description": "Next block to render if all questions in this block are answered correctly",
+              "default": ""
+            },
+            "_partlyCorrect": {
+              "type": "string",
+              "title": "Partly correct target",
+              "description": "Next block to render if all questions in this block are answered partly correctly",
+              "default": ""
+            },
+            "_incorrect": {
+              "type": "string",
+              "title": "Incorrect target",
+              "description": "Next block to render if all questions in this block are answered incorrectly",
+              "default": ""
+            }
+          }
+        }
+      }
+    }
+  }
+}
