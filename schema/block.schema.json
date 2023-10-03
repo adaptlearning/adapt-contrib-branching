@@ -19,6 +19,12 @@
               "description": "Leave blank to use the current article",
               "default": ""
             },
+            "_hasPartlyCorrect": {
+              "type": "boolean",
+              "title": "Use partly correct",
+              "description": "Controls whether this block can be partly correct instead of just incorrect",
+              "default": true
+            },
             "_correct": {
               "type": "string",
               "title": "Correct target",
@@ -36,6 +42,45 @@
               "title": "Incorrect target",
               "description": "Next block to render if all questions in this block are answered incorrectly",
               "default": ""
+            },
+            "_hasAttemptBands": {
+              "type": "boolean",
+              "title": "Has attempt bands",
+              "description": "Controls whether this block will branch according to correctness and attempt or just correctness",
+              "default": false
+            },
+            "_attemptBands": {
+              "type": "array",
+              "title": "Attempt bands",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_attempts": {
+                    "type": "number",
+                    "title": "Minimum attempts",
+                    "description": "Enter a value representing the attempts for the start of the range",
+                    "default": 0
+                  },
+                  "_correct": {
+                    "type": "string",
+                    "title": "Correct target",
+                    "description": "Next block to render if all questions in this block are answered correctly",
+                    "default": ""
+                  },
+                  "_partlyCorrect": {
+                    "type": "string",
+                    "title": "Partly correct target",
+                    "description": "Next block to render if all questions in this block are answered partly correctly",
+                    "default": ""
+                  },
+                  "_incorrect": {
+                    "type": "string",
+                    "title": "Incorrect target",
+                    "description": "Next block to render if all questions in this block are answered incorrectly",
+                    "default": ""
+                  }
+                }
+              }
             }
           }
         }

@@ -35,9 +35,23 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_containerId** (string):  To add a block to a alternative branching set, add the branching id here. Leave this blank to use the current parent.
 
+>**\_hasPartlyCorrect** (boolean):  If set to `false`, the block uses **\_correct** and **\_incorrect** to branch and ignores **\_partlyCorrect**. 
+
 >**\_correct** (string):  When the mandatory questions contained are all correct and complete, this is the id of the next content block.
 
->**\_partlyCorrect** (string):  When the mandatory questions contained are partly correct and complete, this is the id of the next content block.
+>**\_partlyCorrect** (string):  When the mandatory questions contained are partly correct and complete, this is the id of the next content block, `_hasPartlyCorrect = false`.
+
+>**\_incorrect** (string):  When the mandatory questions contained are all incorrect and complete, this is the id of the next content block.
+
+>**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\__attemptBands** behaviour, allowing branching to happen across both attempts and correctness.
+
+**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts. **\_attemptBands** contains values for **\_attempts**, **\_correct**, **\_partlyCorrect** and **\_incorrect**.
+
+>**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
+
+>**\_correct** (string):  When the mandatory questions contained are all correct and complete, this is the id of the next content block.
+
+>**\_partlyCorrect** (string):  When the mandatory questions contained are partly correct and complete, this is the id of the next content block, except where `_hasPartlyCorrect = false`.
 
 >**\_incorrect** (string):  When the mandatory questions contained are all incorrect and complete, this is the id of the next content block.
 
@@ -53,4 +67,4 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 **Author / maintainer:** Adapt Core Team with [contributors](https://github.com/adaptlearning/adapt-contrib-trickle/graphs/contributors)  
 **Accessibility support:** WAI AA  
 **RTL support:** Yes  
-**Cross-platform coverage:** Chrome, Chrome for Android, Firefox (ESR + latest version), Edge, IE11, Safari 12+13 for macOS/iOS/iPadOS, Opera  
+**Cross-platform coverage:** Chrome, Chrome for Android, Firefox (ESR + latest version), Edge, Safari for macOS/iOS/iPadOS, Opera  

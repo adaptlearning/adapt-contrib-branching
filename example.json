@@ -21,3 +21,32 @@
     "_partlyCorrect": "b-260",
     "_incorrect": "b-270"
   }
+
+  "_branching": {
+    "_containerId": "",
+    "__comment": "leave _containerId blank to use the article _id",
+    "_hasPartlyCorrect": false,
+    "_hasAttemptBands": true,
+    "_attemptBands": [
+      {
+        "__comment": "1st attempt",
+        "_attempts": 1,
+        "_correct": "b-255",
+        "_incorrect": "b-270"
+      },
+      {
+        "__comment": "2nd - 3rd attempt",
+        "_attempts": 2,
+        "_correct": "b-255",
+        "_incorrect": "b-270"
+      },
+      {
+        "__comment": "4th+ attempt",
+        "_attempts": 4,
+        "_correct": "b-255",
+        "_incorrect": "b-270"
+      }
+    ],
+    "_correct": "b-255", // correct at any other attempt
+    "_incorrect": "b-270" // incorrect at any other attempt
+  }
