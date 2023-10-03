@@ -19,12 +19,6 @@
               "description": "Leave blank to use the current article",
               "default": ""
             },
-            "_hasPartlyCorrect": {
-              "type": "boolean",
-              "title": "Use partly correct",
-              "description": "Controls whether this block can be partly correct instead of just incorrect",
-              "default": true
-            },
             "_correct": {
               "type": "string",
               "title": "Correct target",

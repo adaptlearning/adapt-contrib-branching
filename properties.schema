@@ -61,15 +61,6 @@
                   "inputType": "Text",
                   "help": "Leave blank to use the current article"
                 },
-                "_hasPartlyCorrect": {
-                  "type": "boolean",
-                  "required": true,
-                  "default": true,
-                  "title": "Use partly correct",
-                  "inputType": "Checkbox",
-                  "validators": [],
-                  "help": "Controls whether this block can be partly correct instead of just incorrect."
-                },
                 "_correct": {
                   "type": "string",
                   "default": "",

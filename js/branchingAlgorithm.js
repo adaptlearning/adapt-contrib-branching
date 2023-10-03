@@ -6,11 +6,9 @@ export function getCorrectness(model) {
   const numberOfPartlyCorrect = (questionModels.filter(child => (child.isPartlyCorrect()) && !child.get('_isOptional'))).length;
   const isCorrect = questionModels.every(child => child.isCorrect() || child.get('_isOptional'));
   const isPartlyCorrect = (numberOfCorrect > 0) || (numberOfPartlyCorrect > 0);
-  const config = model.get('_branching');
-  const hasPartlyCorrect = Boolean(config?._hasPartlyCorrect ?? true);
   const correctnessState = isCorrect ?
     'correct' :
-    isPartlyCorrect && hasPartlyCorrect ?
+    isPartlyCorrect ?
       'partlyCorrect' :
       'incorrect';
   return correctnessState;

@@ -25,30 +25,34 @@
   "_branching": {
     "_containerId": "",
     "__comment": "leave _containerId blank to use the article _id",
-    "_hasPartlyCorrect": false,
     "_hasAttemptBands": true,
     "_attemptBands": [
       {
         "__comment": "2st attempt",
         "_attempts": 2,
         "_correct": "b-255",
+        "_partlyCorrect": "b-260",
         "_incorrect": "b-270"
       },
       {
         "__comment": "3nd - 4rd attempt",
         "_attempts": 3,
         "_correct": "b-255",
+        "_partlyCorrect": "b-260",
         "_incorrect": "b-270"
       },
       {
         "__comment": "5th+ attempt",
         "_attempts": 5,
         "_correct": "b-255",
+        "_partlyCorrect": "b-260",
         "_incorrect": "b-270"
       }
     ],
     "__comment": "correct at any other attempt",
     "_correct": "b-255",
+    "__comment": "partlyCorrect at any other attempt",
+    "_partlyCorrect": "b-260",
     "__comment": "incorrect at any other attempt",
     "_incorrect": "b-270"
   }
