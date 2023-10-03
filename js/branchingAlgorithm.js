@@ -7,7 +7,7 @@ export function getCorrectness(model) {
   const isCorrect = questionModels.every(child => child.isCorrect() || child.get('_isOptional'));
   const isPartlyCorrect = (numberOfCorrect > 0) || (numberOfPartlyCorrect > 0);
   const config = model.get('_branching');
-  const hasPartlyCorrect = Boolean(config._hasPartlyCorrect ?? true);
+  const hasPartlyCorrect = Boolean(config?._hasPartlyCorrect ?? true);
   const correctnessState = isCorrect ?
     'correct' :
     isPartlyCorrect && hasPartlyCorrect ?
@@ -28,7 +28,7 @@ export function getNextId(model) {
   const config = model.get('_branching');
   if (config._force) return config._force;
   const correctness = getCorrectness(model);
-  const hasAttemptBands = Boolean(config._hasAttemptBands ?? false);
+  const hasAttemptBands = Boolean(config?._hasAttemptBands ?? false);
   const attemptsTaken = getAttemptsTaken(model);
   const attemptBands = config._attemptBands || [];
   attemptBands.sort((a, b) => b._attempts - a._attempts);
