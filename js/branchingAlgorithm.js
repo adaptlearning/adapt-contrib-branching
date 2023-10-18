@@ -27,6 +27,7 @@ export function getNextId(model) {
   if (config._force) return config._force;
   const correctness = getCorrectness(model);
   const hasAttemptBands = Boolean(config?._hasAttemptBands ?? false);
+  if (!hasAttemptBands) return config[`_${correctness}`];
   const attemptsTaken = getAttemptsTaken(model);
   const attemptBands = config._attemptBands || [];
   attemptBands.sort((a, b) => b._attempts - a._attempts);
