@@ -17,7 +17,7 @@ export function getCorrectness(model) {
 export function getAttemptsTaken(model) {
   const questionModels = model.getAllDescendantModels().concat([model]).filter(model => model instanceof QuestionModel);
   const attemptsPossible = questionModels.reduce((sum, questionModel) => sum + questionModel.get('_attempts'), 0);
-  const attemptsLeft = questionModels.reduce((sum, questionModel) => sum + (questionModel.get('_attemptsLeft') || questionModel.get('_attempts')), 0);
+  const attemptsLeft = questionModels.reduce((sum, questionModel) => sum + (questionModel.get('_attemptsLeft') ?? questionModel.get('_attempts')), 0);
   const attemptsTaken = (attemptsPossible - attemptsLeft);
   return attemptsTaken;
 }
@@ -30,7 +30,7 @@ export function getNextId(model) {
   if (!hasAttemptBands) return config[`_${correctness}`];
   const attemptsTaken = getAttemptsTaken(model);
   const attemptBands = config._attemptBands || [];
-  attemptBands.sort((a, b) => b._attempts - a._attempts);
+  attemptBands.sort((a, b) => a._attempts - b._attempts);
   const attemptBand = attemptBands
     .slice(0)
     .reverse()
