@@ -41,17 +41,17 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_incorrect** (string):  When the mandatory questions contained are all incorrect and complete, this is the id of the next content block.
 
->**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\__attemptBands** behaviour, allowing branching to happen across both attempts and correctness.
+>**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness.
 
-**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts. **\_attemptBands** contains values for **\_attempts**, **\_correct**, **\_partlyCorrect** and **\_incorrect**.
+>**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts. **\_attemptBands** contains values for **\_attempts**, **\_correct**, **\_partlyCorrect** and **\_incorrect**.
 
->**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
+>>**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
 
->**\_correct** (string):  When the mandatory questions contained are all correct and complete, this is the id of the next content block.
+>>**\_correct** (string):  When the mandatory questions contained are all correct and complete, this is the id of the next content block.
 
->**\_partlyCorrect** (string):  When the mandatory questions contained are partly correct and complete, this is the id of the next content block.
+>>**\_partlyCorrect** (string):  When the mandatory questions contained are partly correct and complete, this is the id of the next content block.
 
->**\_incorrect** (string):  When the mandatory questions contained are all incorrect and complete, this is the id of the next content block.
+>>**\_incorrect** (string):  When the mandatory questions contained are all incorrect and complete, this is the id of the next content block.
 
 ## Limitations
 
