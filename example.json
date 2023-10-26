@@ -4,7 +4,6 @@
   }
 
 // articles.json
-
   "_branching": {
     "_isEnabled": true,
     "_onChildren": true,
@@ -13,7 +12,6 @@
   },
 
 // blocks.json
-
   "_branching": {
     "_containerId": "",
     "__comment": "leave _containerId blank to use the article _id",
@@ -22,6 +20,7 @@
     "_incorrect": "b-270"
   }
 
+// blocks.json - When using attempt-based branching
   "_branching": {
     "_containerId": "",
     "__comment": "leave _containerId blank to use the article _id",
