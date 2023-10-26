@@ -53,6 +53,10 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >>**\_incorrect** (string):  When the mandatory questions contained are all incorrect and complete, this is the id of the next content block.
 
+## Notes
+
+* All blocks that are part of a branching sequence need to have a `_branching` object, even if it's empty. For instance, a block can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own.
+
 ## Limitations
 
 * This extension will not work with legacy versions of trickle <=4.  
