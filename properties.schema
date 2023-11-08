@@ -91,6 +91,15 @@
                   "validators": [],
                   "help": "Controls whether this block will branch according to correctness and attempt or just correctness"
                 },
+                "_useQuestionAttempts": {
+                  "type": "boolean",
+                  "required": true,
+                  "default": false,
+                  "title": "Use question attempts",
+                  "inputType": "Checkbox",
+                  "validators": [],
+                  "help": "Controls whether this block will branch according previous completed attempts at this question"
+                },
                 "_attemptBands": {
                   "type": "array",
                   "required": true,

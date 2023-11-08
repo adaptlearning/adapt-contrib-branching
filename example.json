@@ -25,6 +25,7 @@
     "_containerId": "",
     "__comment": "leave _containerId blank to use the article _id",
     "_hasAttemptBands": true,
+    "_useQuestionAttempts": false,
     "_attemptBands": [
       {
         "__comment": "2nd attempt",

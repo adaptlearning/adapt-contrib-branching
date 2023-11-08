@@ -1,4 +1,5 @@
 import QuestionModel from 'core/js/models/questionModel';
+import data from 'core/js/data';
 
 export function getCorrectness(model) {
   const questionModels = model.getAllDescendantModels().concat([model]).filter(model => model instanceof QuestionModel);
@@ -15,7 +16,17 @@ export function getCorrectness(model) {
 }
 
 export function getAttemptsTaken(model) {
+  const useQuestionAttempts = Boolean(model.get('_branching')?._useQuestionAttempts);
   const questionModels = model.getAllDescendantModels().concat([model]).filter(model => model instanceof QuestionModel);
+  if (useQuestionAttempts) {
+    function getOriginalModelAttemptsTaken(questionModel) {
+      const originalModel = data.findById(questionModel.get('_branchOriginalModelId'));
+      const attemptObjects = originalModel.getAttemptObjects();
+      return attemptObjects.length;
+    }
+    const attemptsTaken = questionModels.reduce((sum, questionModel) => sum + getOriginalModelAttemptsTaken(questionModel), 0);
+    return attemptsTaken;
+  }
   const attemptsPossible = questionModels.reduce((sum, questionModel) => sum + questionModel.get('_attempts'), 0);
   const attemptsLeft = questionModels.reduce((sum, questionModel) => sum + (questionModel.get('_attemptsLeft') ?? questionModel.get('_attempts')), 0);
   const attemptsTaken = (attemptsPossible - attemptsLeft);

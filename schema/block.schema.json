@@ -43,6 +43,12 @@
               "description": "Controls whether this block will branch according to correctness and attempt or just correctness",
               "default": false
             },
+            "_useQuestionAttempts": {
+              "type": "boolean",
+              "title": "Use question attempts",
+              "description": "Controls whether this block will branch according previous completed attempts at this question",
+              "default": false
+            },
             "_attemptBands": {
               "type": "array",
               "title": "Attempt bands",
