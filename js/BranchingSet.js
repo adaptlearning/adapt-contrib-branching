@@ -2,8 +2,8 @@ import Adapt from 'core/js/adapt';
 import data from 'core/js/data';
 import ComponentModel from 'core/js/models/componentModel';
 import {
-  getCorrectness
-} from './correctness';
+  getNextId
+} from './branchingAlgorithm';
 import offlineStorage from 'core/js/offlineStorage';
 import logging from 'core/js/logging';
 
@@ -142,9 +142,7 @@ export default class BranchingSet {
     const lastChildConfig = lastChildModel.get('_branching');
     if (!lastChildConfig) return true;
 
-    // Branch from the last model's correctness, if configured
-    const correctness = getCorrectness(lastChildModel);
-    const nextId = lastChildConfig._force || lastChildConfig[`_${correctness}`];
+    const nextId = getNextId(lastChildModel);
     if (!nextId) return true;
 
     function findNextModel(nextId) {

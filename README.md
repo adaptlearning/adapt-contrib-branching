@@ -41,6 +41,24 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_incorrect** (string):  When the mandatory questions contained are all incorrect and complete, this is the id of the next content block.
 
+>**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness.
+
+>**\_useQuestionAttempts** (boolean):  If set to `true`,  **\_hasAttemptBands** will branch according to the previous completed attempts at this question.
+
+>**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts. **\_attemptBands** contains values for **\_attempts**, **\_correct**, **\_partlyCorrect** and **\_incorrect**.
+
+>>**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
+
+>>**\_correct** (string):  When the mandatory questions contained are all correct and complete, this is the id of the next content block.
+
+>>**\_partlyCorrect** (string):  When the mandatory questions contained are partly correct and complete, this is the id of the next content block.
+
+>>**\_incorrect** (string):  When the mandatory questions contained are all incorrect and complete, this is the id of the next content block.
+
+## Notes
+
+* All blocks that are part of a branching sequence need to have a `_branching` object, even if it's empty. For instance, a block can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own.
+
 ## Limitations
 
 * This extension will not work with legacy versions of trickle <=4.  
@@ -48,9 +66,8 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 * Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
 
 ----------------------------
-**Version number:**  0.1.0  <a href="https://community.adaptlearning.org/" target="_blank"><img src="https://github.com/adaptlearning/documentation/blob/master/04_wiki_assets/plug-ins/images/adapt-logo-mrgn-lft.jpg" alt="adapt learning logo" align="right"></a>  
-**Framework versions:**  5.7+  
-**Author / maintainer:** Adapt Core Team with [contributors](https://github.com/adaptlearning/adapt-contrib-trickle/graphs/contributors)  
-**Accessibility support:** WAI AA  
-**RTL support:** Yes  
-**Cross-platform coverage:** Chrome, Chrome for Android, Firefox (ESR + latest version), Edge, IE11, Safari 12+13 for macOS/iOS/iPadOS, Opera  
+**Framework versions:**  5.7+<br/>
+**Author / maintainer:** Adapt Core Team with [contributors](https://github.com/adaptlearning/adapt-contrib-trickle/graphs/contributors)<br/>
+**Accessibility support:** WAI AA<br/>
+**RTL support:** Yes<br/>
+**Cross-platform coverage:** Chrome, Chrome for Android, Firefox (ESR + latest version), Edge, Safari for macOS/iOS/iPadOS, Opera<br/>

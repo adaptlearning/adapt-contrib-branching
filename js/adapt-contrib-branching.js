@@ -134,8 +134,8 @@ class Branching extends Backbone.Controller {
 
   onComplete(model, value) {
     if (!value) return;
-    this.continueAfterBranchChild(model);
     this.saveBranchQuestionAttemptHistory(model);
+    this.continueAfterBranchChild(model);
   }
 
   continueAfterBranchChild(model) {
