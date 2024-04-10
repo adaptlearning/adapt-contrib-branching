@@ -308,6 +308,8 @@ export default class BranchingSet {
           parentView.nthChild--;
         }
       }
+      const descendants = model.getAllDescendantModels();
+      descendants.forEach(model => data.remove(model));
       data.remove(model);
     });
     if (removeViews) parentView?.setChildViews(childViews);
