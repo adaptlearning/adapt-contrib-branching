@@ -3,9 +3,9 @@ import data from 'core/js/data';
 
 export function getCorrectness(model) {
   const questionModels = model.getAllDescendantModels().concat([model]).filter(model => model instanceof QuestionModel);
-  const numberOfCorrect = (questionModels.filter(child => (child.isCorrect()) && !child.get('_isOptional'))).length;
-  const numberOfPartlyCorrect = (questionModels.filter(child => (child.isPartlyCorrect()) && !child.get('_isOptional'))).length;
-  const isCorrect = questionModels.every(child => child.isCorrect() || child.get('_isOptional'));
+  const numberOfCorrect = (questionModels.filter(child => (child.isCorrect()))).length;
+  const numberOfPartlyCorrect = (questionModels.filter(child => (child.isPartlyCorrect()))).length;
+  const isCorrect = questionModels.every(child => child.isCorrect());
   const isPartlyCorrect = (numberOfCorrect > 0) || (numberOfPartlyCorrect > 0);
   const correctnessState = isCorrect ?
     'correct' :

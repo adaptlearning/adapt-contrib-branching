@@ -134,7 +134,7 @@ export default class BranchingSet {
     }
 
     const lastChildModel = branchedModels[branchedModels.length - 1];
-    const isLastIncomplete = !lastChildModel.get('_isComplete') && !lastChildModel.get('_isOptional');
+    const isLastIncomplete = !lastChildModel.get('_isComplete');
     if (isLastIncomplete && !isTheoretical) {
       return false;
     }
@@ -224,7 +224,7 @@ export default class BranchingSet {
     if (isAnyPartRestored) {
       // Make sure to explicitly set the block to complete if complete
       // This helps trickle setup locking correctly
-      const areAllDescendantsComplete = cloned.getAllDescendantModels(true).every(model => model.get('_isComplete') || model.get('_isOptional'));
+      const areAllDescendantsComplete = cloned.getAllDescendantModels(true).every(model => model.get('_isComplete'));
       if (areAllDescendantsComplete) {
         cloned.setCompletionStatus();
       }
@@ -282,7 +282,7 @@ export default class BranchingSet {
       // Excludes non-trackable extension components, like trickle buttons
       const areAllAvailableTrackableChildrenComplete = childModel.getChildren()
         .filter(model => model.get('_isAvailable') && model.get('_isTrackable') !== false)
-        .every(model => model.get('_isComplete') || model.get('_isOptional'));
+        .every(model => model.get('_isComplete'));
       return areAllAvailableTrackableChildrenComplete;
     });
     return isEffectivelyComplete && this.isAtEnd;
