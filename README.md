@@ -66,7 +66,7 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 * Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
 
 ----------------------------
-**Framework versions:**  5.7+<br/>
+
 **Author / maintainer:** Adapt Core Team with [contributors](https://github.com/adaptlearning/adapt-contrib-trickle/graphs/contributors)<br/>
 **Accessibility support:** WAI AA<br/>
 **RTL support:** Yes<br/>
