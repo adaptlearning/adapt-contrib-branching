@@ -35,11 +35,11 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_containerId** (string):  To add a block to a alternative branching set, add the branching id here. Leave this blank to use the current parent.
 
->**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two options can be ignored. Leave blank to use the next block.
+>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored. Leave blank to use the next available block.
 
->**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block. Leave blank to use the next block.
+>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block. Leave blank to use the next available block.
 
->**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block. Leave blank to use the next block.
+>**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block. Leave blank to use the next available block.
 
 >**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness.
 
@@ -49,11 +49,11 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >>**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
 
->>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two options can be ignored. Leave blank to use the next block.
+>>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored. Leave blank to use the next available block.
 
->>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block. Leave blank to use the next block.
+>>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block. Leave blank to use the next available block.
 
->>**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block. Leave blank to use the next block.
+>>**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block. Leave blank to use the next available block.
 
 ## Notes
 
