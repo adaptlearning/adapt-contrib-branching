@@ -16,7 +16,7 @@
             "_containerId": {
               "type": "string",
               "title": "Alternate branching container id",
-              "description": "Leave blank to use the current article",
+              "description": "Leave blank to use the current article id",
               "default": ""
             },
             "_correct": {
@@ -40,7 +40,7 @@
             "_hasAttemptBands": {
               "type": "boolean",
               "title": "Has attempt bands",
-              "description": "Controls whether this block will branch according to correctness and attempt or just correctness",
+              "description": "When selected, this block will branch according to correctness and attempt rather than just correctness.",
               "default": false
             },
             "_useQuestionAttempts": {

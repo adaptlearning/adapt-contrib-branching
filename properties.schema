@@ -59,7 +59,7 @@
                   "default": "",
                   "title": "Alternate branching container id",
                   "inputType": "Text",
-                  "help": "Leave blank to use the current article"
+                  "help": "Leave blank to use the current article id"
                 },
                 "_correct": {
                   "type": "string",
@@ -89,7 +89,7 @@
                   "title": "Has attempt bands",
                   "inputType": "Checkbox",
                   "validators": [],
-                  "help": "Controls whether this block will branch according to correctness and attempt or just correctness"
+                  "help": "When selected, this block will branch according to correctness and attempt rather than just correctness."
                 },
                 "_useQuestionAttempts": {
                   "type": "boolean",

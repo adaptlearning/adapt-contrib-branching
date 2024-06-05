@@ -33,7 +33,7 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_start** (string):  Used only on an article, defines the starting block for the branching scenario. Leave blank to use the first block.
 
->**\_containerId** (string):  To add a block to a alternative branching set, add the branching id here. Leave this blank to use the current parent.
+>**\_containerId** (string):  To add a block to an alternative branching set, add the branching id here. Useful to pull in a block that lives outside of a branching article into that article's branching scenario. Leave blank to use the id of the current parent article.
 
 >**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored.
 
@@ -41,7 +41,7 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
 
->**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness.
+>**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness (or completion for presentation components).
 
 >**\_useQuestionAttempts** (boolean):  If set to `true`,  **\_hasAttemptBands** will branch according to the previous completed attempts at this question.
 
@@ -57,7 +57,7 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 ## Notes
 
-* All blocks that are part of a branching sequence need to have a `_branching` object, even if it's empty. For instance, a block can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own.
+* All blocks that are part of a branching scenario need to have a `_branching` object, even if it's empty. For instance, a block can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own. In an article with branching enabled, if a particular block does *not* have any `_branching` properties, it will be shown at top of the article, preceding all branching blocks
 * You may use relative selectors like `@block+1` for the values of **\_correct**, **\_incorrect** and **\_partlyCorrect**. However, this can have unpredictable results when using block randomization in an assessment.
 * Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
 * Multiple branching experiences can be used on the same page using multiple articles.
