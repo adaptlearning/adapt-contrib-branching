@@ -33,8 +33,6 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_start** (string):  Used only on an article, defines the starting block for the branching scenario. Leave blank to use the first block.
 
->**\_containerId** (string):  To add a block to an alternative branching set, add the branching id here. Useful to pull in a block that lives outside of a branching article into that article's branching scenario. Leave blank to use the id of the current parent article.
-
 >**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored.
 
 >**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block.

@@ -13,8 +13,6 @@
 
 // blocks.json
   "_branching": {
-    "_containerId": "",
-    "__comment": "leave _containerId blank to use the article _id",
     "_correct": "b-255",
     "_partlyCorrect": "b-260",
     "_incorrect": "b-270"
@@ -22,8 +20,6 @@
 
 // blocks.json - When using attempt-based branching
   "_branching": {
-    "_containerId": "",
-    "__comment": "leave _containerId blank to use the article _id",
     "_hasAttemptBands": true,
     "_useQuestionAttempts": false,
     "_attemptBands": [

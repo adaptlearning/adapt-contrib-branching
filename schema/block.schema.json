@@ -13,12 +13,6 @@
           "title": "Branching",
           "default": {},
           "properties": {
-            "_containerId": {
-              "type": "string",
-              "title": "Alternate branching container id",
-              "description": "Leave blank to use the current article id",
-              "default": ""
-            },
             "_correct": {
               "type": "string",
               "title": "Correct target",

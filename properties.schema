@@ -54,13 +54,6 @@
               "type": "object",
               "legend": "Branching",
               "properties": {
-                "_containerId": {
-                  "type": "string",
-                  "default": "",
-                  "title": "Alternate branching container id",
-                  "inputType": "Text",
-                  "help": "Leave blank to use the current article id"
-                },
                 "_correct": {
                   "type": "string",
                   "default": "",
