@@ -2,7 +2,7 @@
 
 **Branching** is an *extension* which is *not* bundled with the [Adapt framework](https://github.com/adaptlearning/adapt_framework).
 
-The **Branching** extension allows an article to contain a series of blocks which branch according to block correctness. Using **Branching**, a course author may create a dynamic experience based upon user responses.
+The **Branching** extension allows an article to contain a series of blocks which branch according to block correctness. It can also be used with blocks that contain presentation components (e.g. [Narrative](https://github.com/adaptlearning/adapt-contrib-narrative)), branching based on completeness instead. Using **Branching**, a course author may create a dynamic experience based upon user responses.
 
 ## Installation
 
@@ -19,7 +19,7 @@ The **Branching** extension allows an article to contain a series of blocks whic
 
 ## Settings Overview
 
-- A basic **Branching** configuration would be at the article (*articles.json*) level with branching block children (*blocks.json*). The **\_onChildren** attribute determines the container.
+A basic **Branching** configuration would be at the article (*articles.json*) level with branching block children (*blocks.json*). The **\_onChildren** attribute determines the container.
 
 The attributes listed below are properly formatted as JSON in [*example.json*](https://github.com/adaptlearning/adapt-contrib-branching/blob/master/example.json).
 
@@ -35,11 +35,11 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_containerId** (string):  To add a block to a alternative branching set, add the branching id here. Leave this blank to use the current parent.
 
->**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block.
+>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two options can be ignored. Leave blank to use the next block.
 
->**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block.
+>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block. Leave blank to use the next block.
 
->**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
+>**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block. Leave blank to use the next block.
 
 >**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness.
 
@@ -49,21 +49,23 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >>**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
 
->>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block.
+>>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two options can be ignored. Leave blank to use the next block.
 
->>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block.
+>>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block. Leave blank to use the next block.
 
->>**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
+>>**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block. Leave blank to use the next block.
 
 ## Notes
 
 * All blocks that are part of a branching sequence need to have a `_branching` object, even if it's empty. For instance, a block can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own.
+* You may use relative selectors like `@block+1` for the values of **\_correct**, **\_incorrect** and **\_partlyCorrect**. However, this can have unpredictable results when using block randomization in an assessment.
+* Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
+* Multiple branching experiences can be used on the same page using multiple articles.
 
 ## Limitations
 
 * This extension will not work with legacy versions of trickle <=4.  
 * This extension will not work with legacy versions of assessment <=4.  
-* Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
 
 ----------------------------
 
