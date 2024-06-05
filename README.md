@@ -55,7 +55,7 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 ## Notes
 
-* All blocks that are part of a branching scenario need to have a `_branching` object, even if it's empty. For instance, a block can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own. In an article with branching enabled, if a particular block does *not* have any `_branching` properties, it will be shown at top of the article, preceding all branching blocks
+* All blocks that are part of a branching scenario need to have a `_branching` object, even if it's empty. For instance, the last block in a branching article can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own. In a branching article, if a particular block does *not* have any `_branching` properties, it will be shown at top of the article, preceding all branching blocks
 * You may use relative selectors like `@block+1` for the values of **\_correct**, **\_incorrect** and **\_partlyCorrect**. However, this can have unpredictable results when using block randomization in an assessment.
 * Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
 * Multiple branching experiences can be used on the same page using multiple articles.
