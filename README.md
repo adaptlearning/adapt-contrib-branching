@@ -37,7 +37,7 @@ Add to *articles.json*:
 
 >**\_isEnabled** (boolean):  Turns on and off the **Branching** extension for this article.
 
->**\_start** (string):  Used only on an article, defines the starting block for the branching scenario. Leave blank to use the first block.
+>**\_start** (string):  Defines the starting block for the branching scenario. Leave blank to use the first block.
 
 Add to *blocks.json*:
 
