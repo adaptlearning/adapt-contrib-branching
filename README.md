@@ -25,13 +25,25 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 ### Attributes
 
-**\_branching** (object): The Branching attributes group contains values for **\_isEnabled**, **\_onChildren**, **\_correct**, **\_partlyCorrect**, and **\_incorrect**.
+Add to *course.json*:
 
->**\_isEnabled** (boolean):  Turns on and off the **Branching** extension. Can be set in *course.json*, *articles.json* and *blocks.json* to disable **Branching** where not required. Also useful during course development.
+**\_branching** (object): The branching object contains the following settings:
 
->**\_onChildren** (boolean):  If set to `true`, usually on an article, its children will be used for the branching scenario.
+>**\_isEnabled** (boolean):  Turns on and off the **Branching** extension for the entire course.
+
+Add to *articles.json*:
+
+**\_branching** (object): The branching object contains the following settings:
+
+>**\_isEnabled** (boolean):  Turns on and off the **Branching** extension for this article.
 
 >**\_start** (string):  Used only on an article, defines the starting block for the branching scenario. Leave blank to use the first block.
+
+Add to *blocks.json*:
+
+**\_branching** (object): The branching object contains the following settings:
+
+>**\_isEnabled** (boolean):  Turns on and off the **Branching** extension where not required. Useful during course development.
 
 >**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored.
 
@@ -39,15 +51,15 @@ The attributes listed below are properly formatted as JSON in [*example.json*](h
 
 >**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
 
->**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness (or completion for presentation components).
+>**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness (or completion for presentation components). Defaults to `false`.
 
->**\_useQuestionAttempts** (boolean):  If set to `true`,  **\_hasAttemptBands** will branch according to the previous completed attempts at this question.
+>**\_useQuestionAttempts** (boolean):  If set to `true`,  **\_hasAttemptBands** will branch according to the previous completed attempts at this question. Otherwise, **\_hasAttemptBands** will branch according to attempts at the article's assessment. Defaults to `false`.
 
->**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts. **\_attemptBands** contains values for **\_attempts**, **\_correct**, **\_partlyCorrect** and **\_incorrect**.
+>**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts.
 
 >>**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
 
->>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored.
+>>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block.
 
 >>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block.
 

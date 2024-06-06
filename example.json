@@ -6,7 +6,6 @@
 // articles.json
   "_branching": {
     "_isEnabled": true,
-    "_onChildren": true,
     "_comment": "Leave _start blank to start on the first block in the article",
     "_start": ""
   },
