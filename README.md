@@ -51,7 +51,7 @@ Add to *blocks.json*:
 
 >**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
 
->**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness (or completion for presentation components). Defaults to `false`.
+>**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness. Use only when the block contains question component(s). Defaults to `false`.
 
 >**\_useQuestionAttempts** (boolean):  If set to `true`,  **\_hasAttemptBands** will branch according to the previous completed attempts at this question. Otherwise, **\_hasAttemptBands** will branch according to attempts at the article's assessment. Defaults to `false`.
 
