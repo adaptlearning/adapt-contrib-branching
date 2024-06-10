@@ -53,7 +53,7 @@ Add to *blocks.json*:
 
 >**\_hasAttemptBands** (boolean): If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness. Use only when the block contains question component(s). Defaults to `false`.
 
->**\_useQuestionAttempts** (boolean): If set to `true`, **\_hasAttemptBands** will branch according to the previous completed attempts at this question, including when the question is shown multiple times in the branching sequence. When `false`, **\_hasAttemptBands** will branch according to the question's own `_attempts` value. Defaults to `false`.
+>**\_useQuestionAttempts** (boolean): If set to `true`, **\_hasAttemptBands** will branch according to all previous completed attempts at this question, including when the question is shown multiple times in the branching sequence. When `false`, **\_hasAttemptBands** will branch according to the question's own `_attempts` value. Defaults to `false`.
 
 >**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts.
 
