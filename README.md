@@ -29,41 +29,41 @@ Add to *course.json*:
 
 **\_branching** (object): The branching object contains the following settings:
 
->**\_isEnabled** (boolean):  Turns on and off the **Branching** extension for the entire course.
+>**\_isEnabled** (boolean): Turns on and off the **Branching** extension for the entire course.
 
 Add to *articles.json*:
 
 **\_branching** (object): The branching object contains the following settings:
 
->**\_isEnabled** (boolean):  Turns on and off the **Branching** extension for this article.
+>**\_isEnabled** (boolean): Turns on and off the **Branching** extension for this article.
 
->**\_start** (string):  Defines the starting block for the branching scenario. Leave blank to use the first block.
+>**\_start** (string): Defines the starting block for the branching scenario. Leave blank to use the first block.
 
 Add to *blocks.json*:
 
 **\_branching** (object): The branching object contains the following settings:
 
->**\_isEnabled** (boolean):  Turns on and off the **Branching** extension where not required. Useful during course development.
+>**\_isEnabled** (boolean): Turns on and off the **Branching** extension where not required. Useful during course development.
 
->**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored.
+>**\_correct** (string): When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored.
 
->**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block.
+>**\_partlyCorrect** (string): When the questions contained are partly correct and complete, this is the id of the next content block.
 
->**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
+>**\_incorrect** (string): When the questions contained are all incorrect and complete, this is the id of the next content block.
 
->**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness. Use only when the block contains question component(s). Defaults to `false`.
+>**\_hasAttemptBands** (boolean): If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness. Use only when the block contains question component(s). Defaults to `false`.
 
->**\_useQuestionAttempts** (boolean):  If set to `true`,  **\_hasAttemptBands** will branch according to the previous completed attempts at this question, including when the question is shown multiple times in the branching sequence. When `false`, **\_hasAttemptBands** will branch according to the question's own `_attempts` value. Defaults to `false`.
+>**\_useQuestionAttempts** (boolean): If set to `true`, **\_hasAttemptBands** will branch according to the previous completed attempts at this question, including when the question is shown multiple times in the branching sequence. When `false`, **\_hasAttemptBands** will branch according to the question's own `_attempts` value. Defaults to `false`.
 
 >**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts.
 
->>**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
+>>**\_attempts** (number): This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
 
->>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block.
+>>**\_correct** (string): When the questions contained are all correct and complete, this is the id of the next content block.
 
->>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block.
+>>**\_partlyCorrect** (string): When the questions contained are partly correct and complete, this is the id of the next content block.
 
->>**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
+>>**\_incorrect** (string): When the questions contained are all incorrect and complete, this is the id of the next content block.
 
 ## Notes
 
@@ -74,8 +74,8 @@ Add to *blocks.json*:
 
 ## Limitations
 
-* This extension will not work with legacy versions of trickle <=4.  
-* This extension will not work with legacy versions of assessment <=4.  
+* This extension will not work with legacy versions of trickle <=4.
+* This extension will not work with legacy versions of assessment <=4.
 
 ----------------------------
 
