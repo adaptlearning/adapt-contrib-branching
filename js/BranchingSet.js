@@ -224,10 +224,15 @@ export default class BranchingSet {
     if (isAnyPartRestored) {
       // Make sure to explicitly set the block to complete if complete
       // This helps trickle setup locking correctly
-      const areAllDescendantsComplete = cloned.getAllDescendantModels(true).every(model => model.get('_isComplete'));
+      const allDescendantsModels = cloned.getAllDescendantModels(true);
+      const areAllDescendantsComplete = allDescendantsModels.every(model => model.get('_isComplete'));
       if (areAllDescendantsComplete) {
         cloned.setCompletionStatus();
       }
+      // Try to restore user answers on all questions
+      allDescendantsModels
+        .filter(model => model.isTypeGroup('question'))
+        .forEach(model => model?.restoreUserAnswers?.());
     }
     if (shouldSave) {
       this.saveNextModel(nextModel);
