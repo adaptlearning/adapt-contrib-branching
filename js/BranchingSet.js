@@ -232,7 +232,7 @@ export default class BranchingSet {
       // Try to restore user answers on all questions
       allDescendantsModels
         .filter(model => model.isTypeGroup('question'))
-        .forEach(model => model?.restoreUserAnswers?.());
+        .forEach(model => model.restoreUserAnswers());
     }
     if (shouldSave) {
       this.saveNextModel(nextModel);
