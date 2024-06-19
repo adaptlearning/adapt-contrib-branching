@@ -68,7 +68,7 @@ Add to *blocks.json*:
 ## Notes
 
 * All blocks that are part of a branching scenario should have a `_branching` object even if it is empty. For instance, the last block in a branching article can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own. In a branching article, if a particular block does *not* have any `_branching` properties, it will be shown at top of the article, preceding all branching blocks.
-* [**Trickle**](https://github.com/adaptlearning/adapt-contrib-trickle) should not be disabled on any blocks that are part of a branching scenario. To visually disable Trickle on a branched block, you can modify other Trickle properties (e.g. disable the `_button` or disable `_autoScroll`).
+* When [**Trickle**](https://github.com/adaptlearning/adapt-contrib-trickle) is enabled on the branching article, no child blocks should disable Trickle. To visually disable Trickle on a branched block, you can modify other Trickle properties (e.g. disable the `_button` or disable `_autoScroll`).
 * You may use relative selectors like `@block+1` for the values of **\_correct**, **\_incorrect** and **\_partlyCorrect**. However, this can have unpredictable results when using block randomization in an assessment.
 * Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
 * Multiple branching experiences can be used on the same page using multiple articles.
