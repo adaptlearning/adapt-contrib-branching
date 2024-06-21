@@ -2,7 +2,7 @@
 
 **Branching** is an *extension* which is *not* bundled with the [Adapt framework](https://github.com/adaptlearning/adapt_framework).
 
-The **Branching** extension allows an article to contain a series of blocks which branch according to block correctness. Using **Branching**, a course author may create a dynamic experience based upon user responses.
+The **Branching** extension allows an article to contain a series of blocks which branch according to block correctness. It can also be used with blocks that contain presentation components (e.g. [Narrative](https://github.com/adaptlearning/adapt-contrib-narrative)), branching based on completeness instead. Using **Branching**, a course author may create a dynamic experience based upon user responses.
 
 ## Installation
 
@@ -19,54 +19,67 @@ The **Branching** extension allows an article to contain a series of blocks whic
 
 ## Settings Overview
 
-- A basic **Branching** configuration would be at the article (*articles.json*) level with branching block children (*blocks.json*). The **\_onChildren** attribute determines the container.
+A basic **Branching** configuration would be at the article (*articles.json*) level with branching block children (*blocks.json*).
 
 The attributes listed below are properly formatted as JSON in [*example.json*](https://github.com/adaptlearning/adapt-contrib-branching/blob/master/example.json).
 
 ### Attributes
 
-**\_branching** (object): The Branching attributes group contains values for **\_isEnabled**, **\_onChildren**, **\_correct**, **\_partlyCorrect**, and **\_incorrect**.
+Add to *course.json*:
 
->**\_isEnabled** (boolean):  Turns on and off the **Branching** extension. Can be set in *course.json*, *articles.json* and *blocks.json* to disable **Branching** where not required. Also useful during course development.
+**\_branching** (object): The branching object contains the following settings:
 
->**\_onChildren** (boolean):  If set to `true`, usually on an article, its children will be used for the branching scenario.
+>**\_isEnabled** (boolean): Turns on and off the **Branching** extension for the entire course.
 
->**\_start** (string):  Used only on an article, defines the starting block for the branching scenario. Leave blank to use the first block.
+Add to *articles.json*:
 
->**\_containerId** (string):  To add a block to a alternative branching set, add the branching id here. Leave this blank to use the current parent.
+**\_branching** (object): The branching object contains the following settings:
 
->**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block.
+>**\_isEnabled** (boolean): Turns on and off the **Branching** extension for this article.
 
->**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block.
+>**\_start** (string): Defines the starting block for the branching scenario. Leave blank to use the first block.
 
->**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
+Add to *blocks.json*:
 
->**\_hasAttemptBands** (boolean):  If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness.
+**\_branching** (object): The branching object contains the following settings:
 
->**\_useQuestionAttempts** (boolean):  If set to `true`,  **\_hasAttemptBands** will branch according to the previous completed attempts at this question.
+>**\_isEnabled** (boolean): Turns on and off the **Branching** extension where not required. Useful during course development.
 
->**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts. **\_attemptBands** contains values for **\_attempts**, **\_correct**, **\_partlyCorrect** and **\_incorrect**.
+>**\_correct** (string): When the questions contained are all correct and complete, this is the id of the next content block. Use this property for blocks that only contain presentation components as the other two correctness options can be ignored.
 
->>**\_attempts** (number):  This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
+>**\_partlyCorrect** (string): When the questions contained are partly correct and complete, this is the id of the next content block.
 
->>**\_correct** (string):  When the questions contained are all correct and complete, this is the id of the next content block.
+>**\_incorrect** (string): When the questions contained are all incorrect and complete, this is the id of the next content block.
 
->>**\_partlyCorrect** (string):  When the questions contained are partly correct and complete, this is the id of the next content block.
+>**\_hasAttemptBands** (boolean): If set to `true`, turns on the **\_attemptBands** behaviour, allowing branching to happen across both attempts and correctness. Otherwise, branching will happen only for correctness. Use only when the block contains question component(s). Defaults to `false`.
 
->>**\_incorrect** (string):  When the questions contained are all incorrect and complete, this is the id of the next content block.
+>**\_useQuestionAttempts** (boolean): If set to `true`, **\_hasAttemptBands** will branch according to all previous completed attempts at this question, including when the question is shown multiple times in the branching sequence. When `false`, **\_hasAttemptBands** will branch according to the question's own `_attempts` value. Defaults to `false`.
+
+>**\_attemptBands** (object array): Multiple items may be created. Each item represents the branching options for the appropriate range of attempts.
+
+>>**\_attempts** (number): This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
+
+>>**\_correct** (string): When the questions contained are all correct and complete, this is the id of the next content block.
+
+>>**\_partlyCorrect** (string): When the questions contained are partly correct and complete, this is the id of the next content block.
+
+>>**\_incorrect** (string): When the questions contained are all incorrect and complete, this is the id of the next content block.
 
 ## Notes
 
-* All blocks that are part of a branching sequence need to have a `_branching` object, even if it's empty. For instance, a block can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own.
+* All blocks that are part of a branching scenario should have a `_branching` object even if it is empty. For instance, the last block in a branching article can simply use `"_branching": {}` if it should conditionally be shown but does not create any branches of its own. In a branching article, if a particular block does *not* have any `_branching` properties, it will be shown at top of the article, preceding all branching blocks.
+* When [**Trickle**](https://github.com/adaptlearning/adapt-contrib-trickle) is enabled on the branching article, no child blocks should disable Trickle. To visually disable Trickle on a branched block, you can modify other Trickle properties (e.g. disable the `_button` or disable `_autoScroll`).
+* You may use relative selectors like `@block+1` for the values of **\_correct**, **\_incorrect** and **\_partlyCorrect**. However, this can have unpredictable results when using block randomization in an assessment.
+* Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
+* Multiple branching experiences can be used on the same page using multiple articles.
 
 ## Limitations
 
-* This extension will not work with legacy versions of trickle <=4.  
-* This extension will not work with legacy versions of assessment <=4.  
-* Spoor [`_shouldStoreAttempts`](https://github.com/adaptlearning/adapt-contrib-spoor#_shouldstoreattempts-boolean) should be set to true to retain the user selections across sessions
+* This extension will not work with legacy versions of Trickle <=4.
+* This extension will not work with legacy versions of Assessment <=4.
 
 ----------------------------
-**Framework versions:**  5.7+<br/>
+
 **Author / maintainer:** Adapt Core Team with [contributors](https://github.com/adaptlearning/adapt-contrib-trickle/graphs/contributors)<br/>
 **Accessibility support:** WAI AA<br/>
 **RTL support:** Yes<br/>
