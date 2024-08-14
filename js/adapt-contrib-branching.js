@@ -150,7 +150,9 @@ class Branching extends Backbone.Controller {
    * @param {Backbone.model} model
    */
   checkIfIsEffectivelyComplete(model) {
-    const childModel = model.getParent();
+    const childModel = model.get('_type') === 'component'
+      ? model.getParent()
+      : model;
     if (!childModel) return;
     const isBranchChild = childModel.get('_isBranchChild');
     if (!isBranchChild) return;
