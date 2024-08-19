@@ -150,14 +150,14 @@ class Branching extends Backbone.Controller {
    * @param {Backbone.model} model
    */
   checkIfIsEffectivelyComplete(model) {
-    const childModel = model.get('_type') === 'component'
+    const blockModel = model.get('_type') === 'component'
       ? model.getParent()
       : model;
-    if (!childModel) return;
-    const isBranchChild = childModel.get('_isBranchChild');
+    if (!blockModel) return;
+    const isBranchChild = blockModel.get('_isBranchChild');
     if (!isBranchChild) return;
-    const containerModel = childModel.getParent();
-    const set = this.getSubsetByModelId(containerModel.get('_id'));
+    const articleModel = blockModel.getParent();
+    const set = this.getSubsetByModelId(articleModel.get('_id'));
     if (!set?.isEffectivelyComplete) return;
     // Allow assessment to complete at the end, before the last trickle button is clicked
     set.enableParentCompletion();
