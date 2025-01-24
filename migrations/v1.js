@@ -1,14 +1,5 @@
 import { describe, whereContent, whereFromPlugin, mutateContent, checkContent, updatePlugin } from 'adapt-migrations';
 
-const getCourse = content => {
-  const [course] = content.filter(({ _type }) => _type === 'course');
-  return course;
-};
-
-const getGlobals = content => {
-  return getCourse(content)?._globals?._extensions?._branching;
-};
-
 describe('Branching - v1.0.0 to v1.0.3', async () => {
 
   // https://github.com/adaptlearning/adapt-contrib-branching/compare/v1.0.0..v1.0.3
