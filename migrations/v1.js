@@ -1,4 +1,5 @@
 import { describe, whereContent, whereFromPlugin, mutateContent, checkContent, updatePlugin } from 'adapt-migrations';
+import _ from 'lodash';
 
 describe('Branching - v1.0.1 to v1.0.3', async () => {
 
@@ -13,7 +14,7 @@ describe('Branching - v1.0.1 to v1.0.3', async () => {
 
   whereContent('Branching - where branching configured on articles', async (content) => {
     configuredArticles = content.filter(({ _type, _branching }) => _type === 'article' && _branching);
-    if (configuredArticles.length > 0) return true;
+    return configuredArticles.length;
   });
 
   mutateContent('Branching - add _start attribute with default value', async (content) => {
@@ -23,7 +24,8 @@ describe('Branching - v1.0.1 to v1.0.3', async () => {
 
   checkContent('Branching - check _start attribute', async (content) => {
     const isValid = configuredArticles.every(article => article._branching._start === '');
-    return isValid;
+    if (!isValid) throw new Error('Branching - article attribute _start');
+    return true;
   });
 
   updatePlugin('Branching - update to v1.0.3', { name: 'adapt-contrib-branching', version: '1.0.3', framework: '">=5.19.1' });
@@ -39,7 +41,7 @@ describe('Branching - v1.0.3 to v1.1.0', async () => {
 
   whereContent('Branching - where branching configured on blocks', async (content) => {
     configuredBlocks = content.filter(({ _type, _branching }) => _type === 'block' && _branching);
-    if (configuredBlocks.length > 0) return true;
+    return configuredBlocks.length;
   });
 
   mutateContent('Branching - remove _isEnabled attribute', async (content) => {
@@ -48,8 +50,9 @@ describe('Branching - v1.0.3 to v1.1.0', async () => {
   });
 
   checkContent('Branching - check _isEnabled attribute', async (content) => {
-    const isInvalid = configuredBlocks.some(block => Object.hasOwn(block._branching, '_isEnabled'));
-    return !isInvalid;
+    const isValid = configuredBlocks.every(block => !_.has(block._branching, '_isEnabled'));
+    if (!isValid) throw new Error('Branching - block attribute _isEnabled');
+    return true;
   });
 
   updatePlugin('Branching - update to v1.1.0', { name: 'adapt-contrib-branching', version: '1.1.0', framework: '">=5.19.1' });
@@ -71,7 +74,7 @@ describe('Branching - v1.1.2 to v1.2.0', async () => {
 
   whereContent('Branching - where branching configured on blocks', async (content) => {
     configuredBlocks = content.filter(({ _type, _branching }) => _type === 'block' && _branching);
-    if (configuredBlocks.length > 0) return true;
+    return configuredBlocks.length;
   });
 
   mutateContent('Branching - add _hasAttemptBands attribute with default value', async (content) => {
@@ -90,18 +93,21 @@ describe('Branching - v1.1.2 to v1.2.0', async () => {
   });
 
   checkContent('Branching - check _hasAttemptBands attribute', async (content) => {
-    const isInvalid = configuredBlocks.some(block => block._branching._hasAttemptBands !== false);
-    return !isInvalid;
+    const isValid = configuredBlocks.every(block => block._branching._hasAttemptBands === false);
+    if (!isValid) throw new Error('Branching - block attribute _hasAttemptBands');
+    return true;
   });
 
   checkContent('Branching - check _useQuestionAttempts attribute', async (content) => {
-    const isInvalid = configuredBlocks.some(block => block._branching._useQuestionAttempts !== false);
-    return !isInvalid;
+    const isValid = configuredBlocks.every(block => block._branching._useQuestionAttempts === false);
+    if (!isValid) throw new Error('Branching - block attribute _useQuestionAttempts');
+    return true;
   });
 
   checkContent('Branching - check _attemptBands attribute', async (content) => {
-    const isInvalid = configuredBlocks.some(block => block._branching._attemptBands !== attemptBands);
-    return !isInvalid;
+    const isValid = configuredBlocks.every(block => _.isEqual(block._branching._attemptBands, attemptBands));
+    if (!isValid) throw new Error('Branching - block attribute _attemptBands');
+    return true;
   });
 
   updatePlugin('Branching - update to v1.2.0', { name: 'adapt-contrib-branching', version: '1.2.0', framework: '">=5.19.1' });
@@ -117,7 +123,7 @@ describe('Branching - v1.2.3 to v1.3.0', async () => {
 
   whereContent('Branching - where branching configured on blocks', async (content) => {
     configuredBlocks = content.filter(({ _type, _branching }) => _type === 'block' && _branching);
-    if (configuredBlocks.length > 0) return true;
+    return configuredBlocks.length;
   });
 
   mutateContent('Branching - remove _containerId attribute', async (content) => {
@@ -126,8 +132,9 @@ describe('Branching - v1.2.3 to v1.3.0', async () => {
   });
 
   checkContent('Branching - check _containerId attribute', async (content) => {
-    const isInvalid = configuredBlocks.some(block => Object.hasOwn(block._branching, '_containerId'));
-    return !isInvalid;
+    const isValid = configuredBlocks.every(block => !_.has(block._branching, '_containerId'));
+    if (!isValid) throw new Error('Branching - block attribute _containerId');
+    return true;
   });
 
   updatePlugin('Branching - update to v1.3.0', { name: 'adapt-contrib-branching', version: '1.3.0', framework: '">=5.19.1' });
