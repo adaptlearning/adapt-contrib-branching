@@ -59,21 +59,21 @@
                   "default": "",
                   "title": "Correct target",
                   "inputType": "Text",
-                  "help": "Next block to render if all questions in this block are answered correctly"
+                  "help": "Next block to render if all questions in this block are answered correctly. Leave blank to end the branching scenario"
                 },
                 "_partlyCorrect": {
                   "type": "string",
                   "default": "",
                   "title": "Partly correct target",
                   "inputType": "Text",
-                  "help": "Next block to render if all questions in this block are answered partly correctly"
+                  "help": "Next block to render if all questions in this block are answered partly correctly. Leave blank to end the branching scenario"
                 },
                 "_incorrect": {
                   "type": "string",
                   "default": "",
                   "title": "Incorrect target",
                   "inputType": "Text",
-                  "help": "Next block to render if all questions in this block are answered incorrectly"
+                  "help": "Next block to render if all questions in this block are answered incorrectly. Leave blank to end the branching scenario"
                 },
                 "_hasAttemptBands": {
                   "type": "boolean",
@@ -115,21 +115,21 @@
                         "default": "",
                         "title": "Correct target",
                         "inputType": "Text",
-                        "help": "Next block to render if all questions in this block are answered correctly"
+                        "help": "Next block to render if all questions in this block are answered correctly. Leave blank to end the branching scenario"
                       },
                       "_partlyCorrect": {
                         "type": "string",
                         "default": "",
                         "title": "Partly correct target",
                         "inputType": "Text",
-                        "help": "Next block to render if all questions in this block are answered partly correctly"
+                        "help": "Next block to render if all questions in this block are answered partly correctly. Leave blank to end the branching scenario"
                       },
                       "_incorrect": {
                         "type": "string",
                         "default": "",
                         "title": "Incorrect target",
                         "inputType": "Text",
-                        "help": "Next block to render if all questions in this block are answered incorrectly"
+                        "help": "Next block to render if all questions in this block are answered incorrectly. Leave blank to end the branching scenario"
                       }
                     }
                   }
