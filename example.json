@@ -25,6 +25,7 @@
       {
         "__comment": "2nd attempt",
         "_attempts": 2,
+        "__comment": "Leave these blank to end the branching scenario",
         "_correct": "b-255",
         "_partlyCorrect": "b-260",
         "_incorrect": "b-270"
@@ -32,6 +33,7 @@
       {
         "__comment": "3rd - 4th attempt",
         "_attempts": 3,
+        "__comment": "Leave these blank to end the branching scenario",
         "_correct": "b-255",
         "_partlyCorrect": "b-260",
         "_incorrect": "b-270"
@@ -39,11 +41,13 @@
       {
         "__comment": "5th+ attempt",
         "_attempts": 5,
+        "__comment": "Leave these blank to end the branching scenario",
         "_correct": "b-255",
         "_partlyCorrect": "b-260",
         "_incorrect": "b-270"
       }
     ],
+    "__comment": "Leave these blank to end the branching scenario",
     "__comment": "correct at any other attempt",
     "_correct": "b-255",
     "__comment": "partlyCorrect at any other attempt",
