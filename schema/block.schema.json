@@ -16,19 +16,19 @@
             "_correct": {
               "type": "string",
               "title": "Correct target",
-              "description": "Next block to render if all questions in this block are answered correctly",
+              "description": "Next block to render if all questions in this block are answered correctly. Leave blank to end the branching scenario",
               "default": ""
             },
             "_partlyCorrect": {
               "type": "string",
               "title": "Partly correct target",
-              "description": "Next block to render if all questions in this block are answered partly correctly",
+              "description": "Next block to render if all questions in this block are answered partly correctly. Leave blank to end the branching scenario",
               "default": ""
             },
             "_incorrect": {
               "type": "string",
               "title": "Incorrect target",
-              "description": "Next block to render if all questions in this block are answered incorrectly",
+              "description": "Next block to render if all questions in this block are answered incorrectly. Leave blank to end the branching scenario",
               "default": ""
             },
             "_hasAttemptBands": {
@@ -58,19 +58,19 @@
                   "_correct": {
                     "type": "string",
                     "title": "Correct target",
-                    "description": "Next block to render if all questions in this block are answered correctly",
+                    "description": "Next block to render if all questions in this block are answered correctly. Leave blank to end the branching scenario",
                     "default": ""
                   },
                   "_partlyCorrect": {
                     "type": "string",
                     "title": "Partly correct target",
-                    "description": "Next block to render if all questions in this block are answered partly correctly",
+                    "description": "Next block to render if all questions in this block are answered partly correctly. Leave blank to end the branching scenario",
                     "default": ""
                   },
                   "_incorrect": {
                     "type": "string",
                     "title": "Incorrect target",
-                    "description": "Next block to render if all questions in this block are answered incorrectly",
+                    "description": "Next block to render if all questions in this block are answered incorrectly. Leave blank to end the branching scenario",
                     "default": ""
                   }
                 }
