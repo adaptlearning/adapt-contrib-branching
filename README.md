@@ -59,7 +59,7 @@ Add to *blocks.json*:
 
 >>**\_attempts** (number): This numeric value represents the start of the range. The range continues to the next highest **\_attempts** of another band.
 
->>**\_correct** (string): When the questions contained are all correct and complete, this is the id of the next content branching. Leave this property blank to end the branching scenario. 
+>>**\_correct** (string): When the questions contained are all correct and complete, this is the id of the next branching block. Leave this property blank to end the branching scenario. 
 
 >>**\_partlyCorrect** (string): When the questions contained are partly correct and complete, this is the id of the next branching block. Leave this property blank to end the branching scenario. 
 
