@@ -74,8 +74,14 @@ class Branching extends Backbone.Controller {
   }
 
   setupEventListeners() {
+    this.removeEventListeners();
     this.listenTo(Adapt, 'view:requestChild', this.onRequestChild);
     this.listenTo(data, 'change:_isComplete', this.onComplete);
+  }
+
+  removeEventListeners() {
+    this.stopListening(Adapt, 'view:requestChild', this.onRequestChild);
+    this.stopListening(data, 'change:_isComplete', this.onComplete);
   }
 
   onRequestChild(event) {
